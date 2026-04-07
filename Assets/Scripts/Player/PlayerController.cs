@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("Move Config")]
     public float speed;
     public float jumpForce, gravityMultiplier, slideForce, timeSlide, delayMovement;
-    private Vector3 currentDirection, targetDirection, jumpDirection, slideDirection;
+    [HideInInspector] public Vector3 currentDirection, targetDirection;
+    private Vector3 jumpDirection, slideDirection;
     public float directionChangeSpeed;
 
     // slide demonstrate - (after remove)
@@ -27,33 +28,6 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    private void Update()
-    {
-        InputVerify();
-    }
-
-    // Checks if the player pressed the key
-    void InputVerify()
-    {
-        if (Input.GetKey(KeybindingManager.Instance.keyLeft))
-        {
-            targetDirection = Vector3.left;
-        }
-        else if (Input.GetKey(KeybindingManager.Instance.keyRight))
-        {
-            targetDirection = Vector3.right;
-        }
-        
-        if (Input.GetKeyDown(KeybindingManager.Instance.keyUp))
-        {
-            JumpPlayer();
-        }
-        else if (Input.GetKeyDown(KeybindingManager.Instance.keyDown))
-        {
-            StartCoroutine(SlidePlayer());
-        }
-    }
-
     private void FixedUpdate()
     {
         // Interpolação suave da direção
@@ -62,7 +36,7 @@ public class PlayerController : MonoBehaviour
         // Always moves right or left - game mechanics
         MovePlayer(currentDirection);
 
-        // If it's in the air, add gravity to make it fall further.
+        // If it's in the air, add gravity to make it fall further
         if (!canJump)
         {
             rig.AddForce(Vector3.up * Physics.gravity.y * gravityMultiplier, ForceMode.Acceleration);
@@ -77,20 +51,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void JumpPlayer()
+    public void JumpPlayer()
     {
         if (canJump)
         {
             canJump = false;
-            // It reduces movement speed to normalize the jump.
-            rig.velocity = new Vector3(rig.velocity.x, 0, rig.velocity.z); 
+            // It reduces movement speed to normalize the jump
+            Vector3 vel = rig.velocity;
+            vel.y = 0f;
+            rig.velocity = vel;
 
             jumpDirection = Vector3.up * jumpForce;
             rig.AddForce(jumpDirection, ForceMode.Impulse);
         }
     }
 
-    IEnumerator SlidePlayer()
+    public IEnumerator SlidePlayer()
     {
         if (canJump && canSlide)
         {
@@ -104,19 +80,21 @@ public class PlayerController : MonoBehaviour
             {
                 float t = time / timeSlide;
 
-                // Interpolação de rotação (vai e volta)
+                // (It goes back and forth to the example - then it will be changed by the animation)
                 Quaternion currentRotation = Quaternion.Slerp(
                     startRotation,
                     targetRotation,
-                    Mathf.Sin(t * Mathf.PI) // vai até 90° e volta
+                    Mathf.Sin(t * Mathf.PI) // It goes up to 90° and back
                 );
 
                 rig.MoveRotation(currentRotation);
 
-                // Mantém movimento no chão
-                rig.velocity = new Vector3(rig.velocity.x, 0, rig.velocity.z);
+                // Keep moving on the ground
+                Vector3 vel = rig.velocity;
+                vel.y = 0f;
+                rig.velocity = vel;
 
-                // Aplica força contínua (melhor que Impulse dentro de loop)
+                // Applies continuous force to give a slide boost
                 slideDirection = currentDirection * slideForce;
                 rig.AddForce(slideDirection, ForceMode.Acceleration);
 
@@ -124,7 +102,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
 
-            // Reset final
+            // Final reset
             rig.MoveRotation(startRotation);
             
         }

@@ -10,6 +10,12 @@ public class ManagerUI : MonoBehaviour
         SceneManager.LoadScene("SceneTeste");
     }
 
+    public void ResetGame()
+    {
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene("MenuPrincipal");
+    }
+
     public void QuitGame()
     {
         Application.Quit();

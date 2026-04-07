@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SwipeDirection;
 
 public class GoUpStairs : MonoBehaviour
 {
@@ -9,22 +10,45 @@ public class GoUpStairs : MonoBehaviour
     public float targetPositionFloor;
     public CameraFocus cam;
 
+    SwipeDirection swipeDirection;
+
     private void Start()
     {
         player = GetComponent<PlayerController>();
         isOnGround = false;
         canUpStairs = false;
+
+        swipeDirection = GetComponent<SwipeDirection>();
     }
 
     private void Update()
     {
         if (canUpStairs && isOnGround)
         {
-            if (Input.GetKeyDown(KeybindingManager.Instance.keyUp))
+            if (PlatformHelper.IsMobile()) 
             {
-                StartCoroutine(UpStairs());
+                swipeDirection.swipeAction += GoUpSwipe;
+            }
+            else 
+            {
+                if (Input.GetKeyDown(KeybindingManager.Instance.keyUp))
+                {
+                    StartCoroutine(UpStairs());
+                }
             }
         }
+    }
+
+    void GoUpSwipe(Swipe swipe)
+    {
+        if (swipe == Swipe.Up && canUpStairs && isOnGround)
+        {
+            StartCoroutine(UpStairs());
+        }
+    }
+    private void OnDestroy()
+    {
+        swipeDirection.swipeAction -= GoUpSwipe;
     }
 
     IEnumerator UpStairs()
