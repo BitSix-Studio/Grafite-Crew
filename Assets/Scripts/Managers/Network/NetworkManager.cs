@@ -10,7 +10,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner runner;
 
-    async void StartHost(string roomName)
+    public async void StartHost(string roomName)
     {
         // Crie o executor do Fusion
         runner = gameObject.AddComponent<NetworkRunner>();
@@ -34,7 +34,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    async void JoinGame(string roomName)
+    public async void JoinGame(string roomName)
     {
         runner = gameObject.AddComponent<NetworkRunner>();
 
@@ -95,14 +95,28 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
+    [SerializeField] private NetworkPrefabRef playerPrefab;
+    private Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        
+        if (runner.IsServer)
+        {
+            // Cria uma única posição para o player
+            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
+            NetworkObject networkPlayerObj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
+            // Manter o controle dos avatares dos jogadores para fácil acesso
+            spawnedCharacters.Add(player, networkPlayerObj);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        
+        if (spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+        {
+            runner.Despawn(networkObject);
+            spawnedCharacters.Remove(player);
+        }
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
@@ -127,7 +141,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        Debug.Log("Salas disponíveis: " + sessionList.Count);
+        foreach (var session in sessionList)
+        {
+            Debug.Log("Sala: " + session.Name);
+        }
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
