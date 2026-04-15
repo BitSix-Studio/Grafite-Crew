@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class ManagerUI : MonoBehaviour
 {
     public NetworkManager networkManager;
+    public GameObject networkConnectPanel;
     public TMP_InputField inputRoom;
 
     public void PlayGame()
@@ -17,11 +18,13 @@ public class ManagerUI : MonoBehaviour
     public void CreateRoom()
     {
         networkManager.StartHost(inputRoom.text);
+        networkConnectPanel.SetActive(false);
     }
     
     public void JoinRoom()
     {
         networkManager.JoinGame(inputRoom.text);
+        networkConnectPanel.SetActive(false);
     }
 
     public void ResetGame()

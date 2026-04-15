@@ -14,6 +14,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         // Crie o executor do Fusion
         runner = gameObject.AddComponent<NetworkRunner>();
+        runner.ProvideInput = true;
 
         // Crie o NetworkSceneInfo a partir da cena atual.
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
@@ -23,7 +24,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
-        // Iniciar ou entrar (dependendo do modo de jogo) em uma sessão com um nome específico
+        // Iniciar uma sessão com um nome específico
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Host,
@@ -37,7 +38,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public async void JoinGame(string roomName)
     {
         runner = gameObject.AddComponent<NetworkRunner>();
+        runner.ProvideInput = true;
 
+        // Entrar em uma sessão com um nome específico
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
@@ -77,7 +80,21 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        
+        var data = new NetworkInputData();
+
+        if (Input.GetKey(KeyCode.W))
+            data.Direction += Vector3.forward;
+
+        if (Input.GetKey(KeyCode.S))
+            data.Direction += Vector3.back;
+
+        if (Input.GetKey(KeyCode.A))
+            data.Direction += Vector3.left;
+
+        if (Input.GetKey(KeyCode.D))
+            data.Direction += Vector3.right;
+
+        input.Set(data);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -97,13 +114,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] private NetworkPrefabRef playerPrefab;
     private Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Transform[] spawnPoints;
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            // Cria uma única posição para o player
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
+            int index = player.RawEncoded % spawnPoints.Length;
+            // Cria a posição para o player
+            Vector3 spawnPosition = spawnPoints[index].position;
             NetworkObject networkPlayerObj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
             // Manter o controle dos avatares dos jogadores para fácil acesso
             spawnedCharacters.Add(player, networkPlayerObj);
@@ -138,6 +157,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         
     }
+
+    public GameObject panelList;
+    public GameObject roomPrefab;
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {

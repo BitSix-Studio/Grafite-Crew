@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WinnerManager : MonoBehaviour
 {
-    public GameObject canvas;
+    public GameObject winPanel;
     private void Start()
     {
-        canvas.SetActive(false);
+        winPanel.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -15,7 +15,7 @@ public class WinnerManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Time.timeScale = 0f;
-            canvas.SetActive(true);
+            winPanel.SetActive(true);
         }
     }
 }
