@@ -15,6 +15,22 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
+
+        if (Object.HasInputAuthority)
+        {
+            var cam = Camera.main.GetComponent<CameraFocus>();
+
+            if (Object.InputAuthority.RawEncoded == 0)
+            {
+                cam.offSet = new Vector3(5.5f, 1, -8.5f);
+            }
+            else
+            {
+                cam.offSet = new Vector3(-25, 1, -8.5f); // lado oposto
+            }
+
+            cam.CamFocusPlayer(transform);
+        }
     }
 
     public override void FixedUpdateNetwork()
