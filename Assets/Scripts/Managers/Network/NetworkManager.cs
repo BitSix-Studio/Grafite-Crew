@@ -3,33 +3,48 @@ using Fusion.Sockets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public static NetworkManager Instance;
+
     private NetworkRunner runner;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public async void StartLobby()
+    {
+        if (runner == null)
+        {
+            runner = gameObject.AddComponent<NetworkRunner>();
+            runner.ProvideInput = true;
+            runner.AddCallbacks(this);
+        }
+
+        await runner.JoinSessionLobby(SessionLobby.Shared);
+
+        Debug.Log("Entrou no Lobby");
+    }
 
     public async void StartHost(string roomName)
     {
-        // Crie o executor do Fusion
-        runner = gameObject.AddComponent<NetworkRunner>();
-        runner.ProvideInput = true;
-
-        // Crie o NetworkSceneInfo a partir da cena atual.
-        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
-        var sceneInfo = new NetworkSceneInfo();
-        if (scene.IsValid)
-        {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
-        }
-
-        // Iniciar uma sessão com um nome específico
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Host,
             SessionName = roomName,
-            Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
             PlayerCount = 2
         });
@@ -37,10 +52,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void JoinGame(string roomName)
     {
-        runner = gameObject.AddComponent<NetworkRunner>();
-        runner.ProvideInput = true;
-
-        // Entrar em uma sessão com um nome específico
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
@@ -112,20 +123,28 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
-    [SerializeField] private NetworkPrefabRef playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public NetworkPrefabRef playerPrefab;
+    [HideInInspector] public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     public Transform[] spawnPoints;
+    public TextMeshProUGUI playersConnectedText;
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (runner.IsServer)
+        // CHECK THE NUMBER OF PLAYERS
+        int playerCount = runner.ActivePlayers.Count();
+
+        if (playerCount < 2)
         {
-            int index = player.RawEncoded % spawnPoints.Length;
-            // Cria a posição para o player
-            Vector3 spawnPosition = spawnPoints[index].position;
-            NetworkObject networkPlayerObj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
-            // Manter o controle dos avatares dos jogadores para fácil acesso
-            spawnedCharacters.Add(player, networkPlayerObj);
+            playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
+        }
+        else if (playerCount >= 2)
+        {
+            playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
+
+            if (runner.IsSceneAuthority)
+            {
+                runner.LoadScene("SceneTeste");
+            }
         }
     }
 
@@ -150,7 +169,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        
+        if (runner.IsServer)
+        {
+            foreach (var player in runner.ActivePlayers)
+            {
+                if(PlayerSpawn.Instance != null)
+                    PlayerSpawn.Instance.SpawnPlayer(runner, player);
+            }
+        }
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
@@ -158,14 +184,22 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
-    public GameObject panelList;
+    public Transform panelList;
     public GameObject roomPrefab;
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
+        foreach (Transform child in panelList)
+        {
+            Destroy(child.gameObject);
+        }
+
         foreach (var session in sessionList)
         {
-            Debug.Log("Sala: " + session.Name);
+            GameObject obj = Instantiate(roomPrefab, panelList);
+
+            RoomItem item = obj.GetComponent<RoomItem>();
+            item.Setup(session.Name);
         }
     }
 

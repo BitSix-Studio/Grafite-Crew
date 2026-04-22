@@ -20,16 +20,14 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
         {
             var cam = Camera.main.GetComponent<CameraFocus>();
 
-            if (Object.InputAuthority.RawEncoded == 0)
+            if (Object.HasStateAuthority)
             {
-                cam.offSet = new Vector3(5.5f, 1, -8.5f);
+                cam.CamFocusPlayer(cam.playerOneCam);
             }
             else
             {
-                cam.offSet = new Vector3(-25, 1, -8.5f); // lado oposto
+                cam.CamFocusPlayer(cam.playerTwoCam);
             }
-
-            cam.CamFocusPlayer(transform);
         }
     }
 

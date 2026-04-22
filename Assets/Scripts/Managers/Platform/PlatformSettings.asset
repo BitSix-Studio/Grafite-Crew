@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acec621f09362fd47935c1baef3e8881, type: 3}
   m_Name: PlatformSettings
   m_EditorClassIdentifier: 
-  forceMobileInEditor: 1
+  forceMobileInEditor: 0

@@ -3,28 +3,44 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ManagerUI : MonoBehaviour
 {
-    public NetworkManager networkManager;
     public GameObject networkConnectPanel;
     public TMP_InputField inputRoom;
 
+    public GameObject waitConnectPlayersPanel;
+    public Button playGameBtn;
+
+    private void Start()
+    {
+        if(networkConnectPanel != null)
+            networkConnectPanel.SetActive(false);
+
+        if(waitConnectPlayersPanel != null)
+            waitConnectPlayersPanel.SetActive(false);
+    }
+
     public void PlayGame()
     {
-        SceneManager.LoadScene("SceneTeste");
+        NetworkManager.Instance.StartLobby();
+        networkConnectPanel.SetActive(true);
     }
 
     public void CreateRoom()
     {
-        networkManager.StartHost(inputRoom.text);
+        NetworkManager.Instance.StartHost(inputRoom.text);
         networkConnectPanel.SetActive(false);
+        waitConnectPlayersPanel.SetActive(true);
+        playGameBtn.interactable = false;
     }
     
     public void JoinRoom()
     {
-        networkManager.JoinGame(inputRoom.text);
+        NetworkManager.Instance.JoinGame(inputRoom.text);
         networkConnectPanel.SetActive(false);
+        waitConnectPlayersPanel.SetActive(true);
     }
 
     public void ResetGame()

@@ -5,12 +5,12 @@ using UnityEngine;
 public class CameraFocus : MonoBehaviour
 {
     [Header("Initial Config")]
-    public Vector3 offSet;
+    public Transform playerOneCam, playerTwoCam;
 
-    public void CamFocusPlayer(Transform target)
+    public void CamFocusPlayer(Transform playerCam)
     {
-        if (target == null) return;
+        if (playerCam == null) return;
 
-        transform.position = target.position + offSet;
+        transform.position = playerCam.position;
     }
 }
