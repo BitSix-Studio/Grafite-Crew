@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93d759053e1421040987949a9f38a7a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   canMove: 0
   canJump: 0
   canSlide: 0
@@ -172,8 +171,8 @@ MonoBehaviour:
   jumpImpulse: 8
   acceleration: 10
   braking: 10
-  maxSpeed: 2
-  rotationSpeed: 15
+  maxSpeed: 5
+  rotationSpeed: 1
 --- !u!143 &5314492546129153385
 CharacterController:
   m_ObjectHideFlags: 0

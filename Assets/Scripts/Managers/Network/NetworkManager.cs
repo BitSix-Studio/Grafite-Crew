@@ -25,6 +25,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         DontDestroyOnLoad(gameObject);
     }
 
+    // CREATE AND ENTER LOBBY GAME
     public async void StartLobby()
     {
         if (runner == null)
@@ -39,6 +40,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log("Entrou no Lobby");
     }
 
+    // CREATE ROOM
     public async void StartHost(string roomName)
     {
         await runner.StartGame(new StartGameArgs()
@@ -50,6 +52,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
+    // JOIN ROOM
     public async void JoinGame(string roomName)
     {
         await runner.StartGame(new StartGameArgs()
@@ -89,21 +92,16 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
+    // PLAYER INPUTS CALL
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
 
-        if (Input.GetKey(KeyCode.W))
-            data.Direction += Vector3.forward;
+        if (Input.GetKey(KeybindingManager.Instance.keyLeft))
+            data.targetDirection = Vector3.left;
 
-        if (Input.GetKey(KeyCode.S))
-            data.Direction += Vector3.back;
-
-        if (Input.GetKey(KeyCode.A))
-            data.Direction += Vector3.left;
-
-        if (Input.GetKey(KeyCode.D))
-            data.Direction += Vector3.right;
+        if (Input.GetKey(KeybindingManager.Instance.keyRight))
+            data.targetDirection = Vector3.right;
 
         input.Set(data);
     }
@@ -128,26 +126,29 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public Transform[] spawnPoints;
     public TextMeshProUGUI playersConnectedText;
 
+    // PLAYER CONTROL ENTERING THE ROOM
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         // CHECK THE NUMBER OF PLAYERS
-        int playerCount = runner.ActivePlayers.Count();
+        //int playerCount = runner.ActivePlayers.Count();
 
-        if (playerCount < 2)
-        {
-            playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
-        }
-        else if (playerCount >= 2)
-        {
-            playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
+        //if (playerCount < 2)
+        //{
+        //    playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
+        //}
+        //else if (playerCount >= 2)
+        //{
+        //    playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
 
-            if (runner.IsSceneAuthority)
-            {
-                runner.LoadScene("SceneTeste");
-            }
-        }
+        //    if (runner.IsSceneAuthority)
+        //    {
+        //        runner.LoadScene("Arena1v1");
+        //    }
+        //}
+        runner.LoadScene("Arena1v1");
     }
 
+    // PLAYER CONTROL LEFT THE ROOM
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         if (spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
@@ -167,6 +168,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
+    // WHEN THE SCENE FINISHES LOADING
     public void OnSceneLoadDone(NetworkRunner runner)
     {
         if (runner.IsServer)
@@ -187,6 +189,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public Transform panelList;
     public GameObject roomPrefab;
 
+    // LIST OF ROOMS CREATED
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
         foreach (Transform child in panelList)

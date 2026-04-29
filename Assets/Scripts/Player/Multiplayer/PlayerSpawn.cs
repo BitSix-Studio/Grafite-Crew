@@ -16,7 +16,8 @@ public class PlayerSpawn : MonoBehaviour
 
     private void Start()
     {
-        NetworkManager.Instance.spawnPoints = spawnPoints;
+        if(NetworkManager.Instance != null)
+            NetworkManager.Instance.spawnPoints = spawnPoints;
     }
 
     public void SpawnPlayer(NetworkRunner runner, PlayerRef player)

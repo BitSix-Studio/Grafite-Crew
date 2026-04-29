@@ -5,16 +5,18 @@ using UnityEngine;
 
 public class PlayerControllerMultiplayer : NetworkBehaviour
 {
-    [Header("Move Config")]
-    public float speed;
-
     [HideInInspector] public bool canMove, canJump, canSlide;
 
     private NetworkCharacterController networkController;
+    private Vector3 currentDirection;
 
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
+
+        canJump = false;
+        canSlide = true;
+        canMove = true;
 
         if (Object.HasInputAuthority)
         {
@@ -37,9 +39,19 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
         {
             if (Object.HasStateAuthority)
             {
-                data.Direction.Normalize();
-                networkController.Move(speed * data.Direction * Runner.DeltaTime);
+                data.targetDirection.Normalize();
+
+                currentDirection = Vector3.Lerp(currentDirection, data.targetDirection, networkController.rotationSpeed * Runner.DeltaTime);
+                MovePlayer(currentDirection);
             }
+        }
+    }
+
+    void MovePlayer(Vector3 dir)
+    {
+        if (canMove)
+        {
+            networkController.Move(dir * networkController.maxSpeed * Runner.DeltaTime);
         }
     }
 }

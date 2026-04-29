@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuPrincipal.unity
     guid: 4c06269d388e7f94d945711aa42eaa4a
   - enabled: 1
-    path: Assets/Scenes/SceneTeste.unity
+    path: Assets/Scenes/Arena1v1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 65d6f865cabc2434ebeaa8016df5fcbd, type: 2}
