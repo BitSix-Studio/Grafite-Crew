@@ -2810,8 +2810,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06cddc1fbc61c243acca1b5c11ebae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyUp: 119
-  keyDown: 115
+  keyUp: 32
+  keyDown: 304
   keyLeft: 97
   keyRight: 100
 --- !u!1 &1663440157

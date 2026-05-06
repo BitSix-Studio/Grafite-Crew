@@ -103,6 +103,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (Input.GetKey(KeybindingManager.Instance.keyRight))
             data.targetDirection = Vector3.right;
 
+        if(Input.GetKey(KeybindingManager.Instance.keyUp))
+            data.buttons.Set(InputButtons.Jump, true);
+
         input.Set(data);
     }
 
