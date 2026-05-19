@@ -28,12 +28,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // CREATE AND ENTER LOBBY GAME
     public async void StartLobby()
     {
-        if (runner == null)
+        if (runner != null)
         {
-            runner = gameObject.AddComponent<NetworkRunner>();
-            runner.ProvideInput = true;
-            runner.AddCallbacks(this);
+            runner.Shutdown();
+            Destroy(runner);
         }
+
+        runner = gameObject.AddComponent<NetworkRunner>();
+        runner.ProvideInput = true;
+        runner.AddCallbacks(this);
 
         await runner.JoinSessionLobby(SessionLobby.Shared);
 
@@ -43,6 +46,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // CREATE ROOM
     public async void StartHost(string roomName)
     {
+        if (runner == null)
+            StartLobby();
+
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Host,
@@ -55,6 +61,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // JOIN ROOM
     public async void JoinGame(string roomName)
     {
+        if (runner == null)
+            StartLobby();
+
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
@@ -132,7 +141,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // PLAYER CONTROL ENTERING THE ROOM
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        // CHECK THE NUMBER OF PLAYERS
+        if (!runner.IsServer)
+            return;
+
+        //CHECK THE NUMBER OF PLAYERS
         //int playerCount = runner.ActivePlayers.Count();
 
         //if (playerCount < 2)
@@ -174,13 +186,33 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // WHEN THE SCENE FINISHES LOADING
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        if (runner.IsServer)
+        if (!runner.IsServer)
+            return;
+
+        StartCoroutine(SpawnPlayers(runner));
+    }
+
+    private IEnumerator SpawnPlayers(NetworkRunner runner)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            foreach (var player in runner.ActivePlayers)
-            {
-                if(PlayerSpawn.Instance != null)
-                    PlayerSpawn.Instance.SpawnPlayer(runner, player);
-            }
+            Debug.Log("SpawnPoints não configurados!");
+            yield return null;
+        }
+
+        foreach (var player in runner.ActivePlayers)
+        {
+            // SPAWN DO PLAYER
+            int index = player.RawEncoded % spawnPoints.Length;
+            Vector3 spawnPosition = spawnPoints[index].position;
+
+            var obj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
+
+            obj.GetComponent<PlayerControllerMultiplayer>().PlayerIndex = index;
+
+            spawnedCharacters[player] = obj;
         }
     }
 

@@ -19,6 +19,6 @@ public class RoomItem : MonoBehaviour
 
     void JoinRoom()
     {
-        NetworkManager.Instance.JoinGame(roomName);
+        ManagerUI.Instance.JoinRoom();
     }
 }

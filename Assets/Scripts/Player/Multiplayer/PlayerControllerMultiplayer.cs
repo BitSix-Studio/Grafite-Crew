@@ -2,38 +2,39 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.LightAnchor;
 
 public class PlayerControllerMultiplayer : NetworkBehaviour
 {
     [HideInInspector] public bool canMove, canSlide;
 
-    private NetworkCharacterController networkController;
+    [HideInInspector] public NetworkCharacterController networkController;
+    public CameraFocus cam;
+    [Networked] public int PlayerIndex { get; set; }
     private Vector3 currentDirection;
 
-    private NetworkButtons previousButtons;
-    [SerializeField] private float groundCheckDistance = 1.1f;
-    [SerializeField] private LayerMask groundLayer;
-    private bool hasJumped;
+    [HideInInspector] public NetworkButtons previousButtons;
+    public bool jumpPressedThisTick { get; private set; }
+    public bool jumpConsumed = false;
 
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
+
         canSlide = true;
         canMove = true;
 
-        if (Object.HasInputAuthority)
-        {
-            var cam = Camera.main.GetComponent<CameraFocus>();
+        cam = Camera.main.GetComponent<CameraFocus>();
 
-            if (Object.HasStateAuthority)
-            {
-                cam.CamFocusPlayer(cam.playerOneCam);
-            }
-            else
-            {
-                cam.CamFocusPlayer(cam.playerTwoCam);
-            }
+        if (!Object.HasInputAuthority)
+            return;
+
+        if (PlayerIndex == 0)
+        {
+            cam.CamFocusPlayer(cam.playerOneCam);
+        }
+        else
+        {
+            cam.CamFocusPlayer(cam.playerTwoCam);
         }
     }
 
@@ -41,6 +42,7 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
+            jumpPressedThisTick = data.buttons.WasPressed(previousButtons, InputButtons.Jump);
             if (Object.HasStateAuthority)
             {
                 data.targetDirection.Normalize();
@@ -48,11 +50,11 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
                 currentDirection = Vector3.Lerp(currentDirection, data.targetDirection, networkController.rotationSpeed * Runner.DeltaTime);
                 MovePlayer(currentDirection);
 
-                JumpPlayer(data);
+                JumpPlayer();
+
+                previousButtons = data.buttons;
             }
         }
-
-        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.red);
     }
 
     void MovePlayer(Vector3 dir)
@@ -63,21 +65,33 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
         }
     }
 
-    public void JumpPlayer(NetworkInputData data)
+    public void JumpPlayer()
     {
-        bool jumpPressed = data.buttons.WasPressed(previousButtons, InputButtons.Jump);
-
-        if (jumpPressed && IsGrounded())
+        if (jumpPressedThisTick && !jumpConsumed && IsGrounded())
         {
             networkController.Jump(true);
-            hasJumped = true;
         }
-
-        previousButtons = data.buttons;
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        //return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        return networkController.Grounded;
+    }
+
+    public void UpdateElevatorCamera(float offset)
+    {
+        if (!Object.HasInputAuthority || cam == null)
+            return;
+
+        cam.SetElevatorOffset(offset);
+    }
+
+    public void ResetElevatorCamera()
+    {
+        if (!Object.HasInputAuthority || cam == null)
+            return;
+
+        cam.ResetElevatorOffset();
     }
 }

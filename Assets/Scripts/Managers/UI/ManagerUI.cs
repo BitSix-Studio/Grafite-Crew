@@ -7,11 +7,18 @@ using UnityEngine.UI;
 
 public class ManagerUI : MonoBehaviour
 {
+    public static ManagerUI Instance;
+
     public GameObject networkConnectPanel;
     public TMP_InputField inputRoom;
 
     public GameObject waitConnectPlayersPanel;
     public Button playGameBtn;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {

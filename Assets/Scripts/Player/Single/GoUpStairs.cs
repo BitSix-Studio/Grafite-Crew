@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static SwipeDirection;
 
@@ -9,6 +10,10 @@ public class GoUpStairs : MonoBehaviour
     PlayerController player;
     public float targetPositionFloor;
     public CameraFocus cam;
+
+    public GameObject prefabCorridor;
+    public Transform objScenario;
+    public Vector3 AddNextCorridor;
 
     SwipeDirection swipeDirection;
 
@@ -34,6 +39,7 @@ public class GoUpStairs : MonoBehaviour
                 if (Input.GetKeyDown(KeybindingManager.Instance.keyUp))
                 {
                     StartCoroutine(UpStairs());
+                    CreateCorridor();
                 }
             }
         }
@@ -49,6 +55,13 @@ public class GoUpStairs : MonoBehaviour
     private void OnDestroy()
     {
         swipeDirection.swipeAction -= GoUpSwipe;
+    }
+
+    private void CreateCorridor()
+    {
+        Vector3 nextCorridorPos = AddNextCorridor;
+        Instantiate(prefabCorridor, nextCorridorPos, objScenario.rotation);
+        AddNextCorridor.y += 6;
     }
 
     IEnumerator UpStairs()
@@ -85,28 +98,15 @@ public class GoUpStairs : MonoBehaviour
         yield return new WaitForSeconds(player.delayMovement);
         player.canMove = true;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Stairs"))
-        {
-            canUpStairs = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Stairs"))
-        {
-            canUpStairs = false;
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == 6)
         {
             isOnGround = true;
+        }
+        if (collision.gameObject.CompareTag("Elevator"))
+        {
+            canUpStairs = true;
         }
     }
 
@@ -115,6 +115,10 @@ public class GoUpStairs : MonoBehaviour
         if (collision.gameObject.layer == 6)
         {
             isOnGround = false;
+        }
+        if (collision.gameObject.CompareTag("Elevator"))
+        {
+            canUpStairs = false;
         }
     }
 }
