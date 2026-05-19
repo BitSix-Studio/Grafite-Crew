@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,24 +18,34 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(gameObject);
+            return;
         }
 
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
+    private async void Start()
+    {
+        await StartLobby();
+    }
+
     // CREATE AND ENTER LOBBY GAME
-    public async void StartLobby()
+    public async Task StartLobby()
     {
         if (runner != null)
         {
-            runner.Shutdown();
-            Destroy(runner);
+            await runner.Shutdown();
+            Destroy(runner.gameObject);
+            runner = null;
         }
 
-        runner = gameObject.AddComponent<NetworkRunner>();
+        var runnerObj = new GameObject("NetworkRunner");
+        runner = runnerObj.AddComponent<NetworkRunner>();
+
         runner.ProvideInput = true;
         runner.AddCallbacks(this);
 
@@ -44,10 +55,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     // CREATE ROOM
-    public async void StartHost(string roomName)
+    public async Task StartHost(string roomName)
     {
-        if (runner == null)
-            StartLobby();
+        await StartLobby();
 
         await runner.StartGame(new StartGameArgs()
         {
@@ -106,6 +116,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         var data = new NetworkInputData();
 
+        // KEYBOARD
         if (Input.GetKey(KeybindingManager.Instance.keyLeft))
             data.targetDirection = Vector3.left;
 
@@ -114,6 +125,20 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         if(Input.GetKey(KeybindingManager.Instance.keyUp))
             data.buttons.Set(InputButtons.Jump, true);
+
+        //MOBILE
+        if (PlatformHelper.IsMobile() && MobileInput.Instance != null)
+        {
+            data.targetDirection = MobileInput.Instance.MoveDirection;
+
+            if (MobileInput.Instance.JumpPressed)
+                data.buttons.Set(InputButtons.Jump, true);
+
+            //if (MobileInput.Instance.SlidePressed)
+            //    data.buttons.Set(InputButtons.Slide, true);
+
+            MobileInput.Instance.ResetButtons();
+        }
 
         input.Set(data);
     }
@@ -221,24 +246,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
-    public Transform panelList;
-    public GameObject roomPrefab;
-
+    public event Action<List<SessionInfo>> SessionListUpdated;
     // LIST OF ROOMS CREATED
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        foreach (Transform child in panelList)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach (var session in sessionList)
-        {
-            GameObject obj = Instantiate(roomPrefab, panelList);
-
-            RoomItem item = obj.GetComponent<RoomItem>();
-            item.Setup(session.Name);
-        }
+        SessionListUpdated?.Invoke(sessionList);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)

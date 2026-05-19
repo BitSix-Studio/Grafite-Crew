@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerControllerMultiplayer : NetworkBehaviour
 {
-    [HideInInspector] public bool canMove, canSlide;
+    [Networked] public NetworkBool canMove { get; set; }
 
     [HideInInspector] public NetworkCharacterController networkController;
     public CameraFocus cam;
@@ -16,11 +16,12 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     public bool jumpPressedThisTick { get; private set; }
     public bool jumpConsumed = false;
 
+    private bool resultShown;
+
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
 
-        canSlide = true;
         canMove = true;
 
         cam = Camera.main.GetComponent<CameraFocus>();
@@ -40,6 +41,9 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if (!canMove)
+            return;
+
         if (GetInput(out NetworkInputData data))
         {
             jumpPressedThisTick = data.buttons.WasPressed(previousButtons, InputButtons.Jump);

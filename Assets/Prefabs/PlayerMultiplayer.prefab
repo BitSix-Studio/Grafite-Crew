@@ -128,6 +128,8 @@ GameObject:
   - component: {fileID: -5920955856705260487}
   - component: {fileID: 2123570203034849108}
   - component: {fileID: 5314492546129153385}
+  - component: {fileID: 8763636747638403327}
+  - component: {fileID: 5191588028201162992}
   m_Layer: 0
   m_Name: PlayerMultiplayer
   m_TagString: Player
@@ -185,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93d759053e1421040987949a9f38a7a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 0
-  canSlide: 0
+  _canMove:
+    _value: 0
   networkController: {fileID: 0}
   cam: {fileID: 0}
   _PlayerIndex: 0
@@ -213,7 +215,8 @@ MonoBehaviour:
   elevatorCheckPoint: {fileID: 8619021715956934557}
   prefabCorridor:
     RawGuidValue: b912af04d50f3af488b2c9b4a7cc33fd
-  AddNextCorridor: {x: 0, y: 6, z: 0}
+  numCorridorsActual: 0
+  maxNumCorridors: 3
 --- !u!114 &2123570203034849108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,3 +262,27 @@ CharacterController:
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8763636747638403327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198154425366013241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6190e684896322478c3ed7818bf839b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5191588028201162992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198154425366013241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332a92c215526947b4e64c73dfdc60d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

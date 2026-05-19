@@ -27,6 +27,9 @@ public class GoUpElevator : NetworkBehaviour
 
     private bool nextIsRight;
 
+    public int numCorridorsActual = 0;
+    public int maxNumCorridors;
+
     public override void FixedUpdateNetwork()
     {
         ElevatorMovement();
@@ -84,6 +87,9 @@ public class GoUpElevator : NetworkBehaviour
 
     public void CreateCorridor()
     {
+        if (numCorridorsActual >= maxNumCorridors)
+            return;
+
         if (!Object.HasStateAuthority)
             return;
 
@@ -102,6 +108,11 @@ public class GoUpElevator : NetworkBehaviour
 
         nextIsRight = !nextIsRight;
         corridor.SetSide(nextIsRight);
+
+        numCorridorsActual++;
+
+        if (numCorridorsActual == maxNumCorridors - 1)
+            GameManager.Instance.WinGame(nextCorridorPos);
     }
 
     private bool IsNearElevator()

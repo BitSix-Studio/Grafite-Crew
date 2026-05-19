@@ -11,5 +11,6 @@ public struct NetworkInputData : INetworkInput
 
 public enum InputButtons
 {
-    Jump = 0
+    Jump = 0,
+    Slide = 1
 }

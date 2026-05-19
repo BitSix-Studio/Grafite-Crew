@@ -1,21 +1,23 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WinnerManager : MonoBehaviour
+public class WinnerManager : NetworkBehaviour
 {
-    public GameObject winPanel;
-    private void Start()
-    {
-        winPanel.SetActive(false);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Time.timeScale = 0f;
-            winPanel.SetActive(true);
-        }
+        if (!Object.HasStateAuthority)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        NetworkObject playerObj = other.GetComponent<NetworkObject>();
+
+        if (!Object.HasStateAuthority)
+            return;
+
+        GameManager.Instance.FinishMatch(playerObj.InputAuthority);
     }
 }
