@@ -170,22 +170,21 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             return;
 
         //CHECK THE NUMBER OF PLAYERS
-        //int playerCount = runner.ActivePlayers.Count();
+        int playerCount = runner.ActivePlayers.Count();
 
-        //if (playerCount < 2)
-        //{
-        //    playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
-        //}
-        //else if (playerCount >= 2)
-        //{
-        //    playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
+        if (playerCount < 2)
+        {
+            playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
+        }
+        else if (playerCount >= 2)
+        {
+            playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
 
-        //    if (runner.IsSceneAuthority)
-        //    {
-        //        runner.LoadScene("Arena1v1");
-        //    }
-        //}
-        runner.LoadScene("Arena1v1");
+            if (runner.IsSceneAuthority)
+            {
+                runner.LoadScene("Arena1v1");
+            }
+        }
     }
 
     // PLAYER CONTROL LEFT THE ROOM

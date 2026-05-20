@@ -3224,8 +3224,7 @@ MonoBehaviour:
   inputRoom: {fileID: 315270039313508468}
   waitConnectPlayersPanel: {fileID: 1262339493}
   playGameBtn: {fileID: 889906378}
-  createRoomBtn: {fileID: 2036597141635044377}
-  panelList: {fileID: 539176374}
+  panelList: {fileID: 1899728218}
   roomPrefab: {fileID: 1918535031666777834, guid: a0848de2da6c7f04d87f7091faffc302, type: 3}
 --- !u!1 &1739935344
 GameObject:
