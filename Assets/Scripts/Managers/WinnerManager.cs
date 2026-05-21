@@ -15,9 +15,6 @@ public class WinnerManager : NetworkBehaviour
 
         NetworkObject playerObj = other.GetComponent<NetworkObject>();
 
-        if (!Object.HasStateAuthority)
-            return;
-
         GameManager.Instance.FinishMatch(playerObj.InputAuthority);
     }
 }

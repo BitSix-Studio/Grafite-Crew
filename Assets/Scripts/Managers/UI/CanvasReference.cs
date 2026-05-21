@@ -7,18 +7,10 @@ using UnityEngine.UI;
 
 public class CanvasReference : MonoBehaviour
 {
+    [Header("UI of ARENA")]
     public GameObject winPanel;
     public GameObject losePanel;
     public Button[] resetBtn;
-
-    public GameObject networkConnectPanel;
-    public TMP_InputField inputRoom;
-
-    public GameObject waitConnectPlayersPanel;
-    public Button playGameBtn;
-
-    public Transform panelList;
-    public GameObject roomPrefab;
 
     private IEnumerator Start()
     {
@@ -28,15 +20,6 @@ public class CanvasReference : MonoBehaviour
         {
             yield return null;
         }
-
-        ManagerUI.Instance.RegisterUI(
-            networkConnectPanel,
-            inputRoom,
-            waitConnectPlayersPanel,
-            playGameBtn,
-            panelList,
-            roomPrefab
-        );
 
         if (resetBtn != null)
         {

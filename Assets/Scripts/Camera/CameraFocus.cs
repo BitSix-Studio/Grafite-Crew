@@ -7,7 +7,7 @@ public class CameraFocus : MonoBehaviour
     [Header("Initial Config")]
     public Transform playerOneCam, playerTwoCam;
 
-    public Transform currentCamTarget;
+    private Transform currentCamTarget;
     private Vector3 elevatorOffset;
 
     public void CamFocusPlayer(Transform playerCam)

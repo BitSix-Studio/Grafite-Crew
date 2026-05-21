@@ -10,15 +10,18 @@ public class ManagerUI : MonoBehaviour
 {
     public static ManagerUI Instance;
 
+    [Header("UI of Connection Panel")]
     public GameObject networkConnectPanel;
     public TMP_InputField inputRoom;
-
-    public GameObject waitConnectPlayersPanel;
-    public Button playGameBtn;
-    public Button createRoomBtn;
-
     public Transform panelList;
     public GameObject roomPrefab;
+
+    [Header("UI of Indicator Players Connect")]
+    public GameObject waitConnectPlayersPanel;
+    public TextMeshProUGUI playersConnectedText;
+
+    [Header("Menu Buttons")]
+    public Button playGameBtn;
 
     private void Awake()
     {
@@ -46,26 +49,16 @@ public class ManagerUI : MonoBehaviour
             NetworkManager.Instance.SessionListUpdated -= RefreshRooms;
         }
     }
-    public void RegisterUI(
-    GameObject connectPanel,
-    TMP_InputField roomInput,
-    GameObject waitingPanel,
-    Button playBtn,
-    Transform roomList,
-    GameObject roomPrefabObj)
-    {
-        networkConnectPanel = connectPanel;
-        inputRoom = roomInput;
-        waitConnectPlayersPanel = waitingPanel;
-        playGameBtn = playBtn;
-        panelList = roomList;
-        roomPrefab = roomPrefabObj;
 
-        InitializeUI();
-    }
-
-    private void InitializeUI()
+    private IEnumerator Start()
     {
+        yield return null;
+
+        while (GameManager.Instance == null && NetworkManager.Instance == null)
+        {
+            yield return null;
+        }
+
         if (networkConnectPanel != null)
             networkConnectPanel.SetActive(false);
 
@@ -74,6 +67,9 @@ public class ManagerUI : MonoBehaviour
 
         if (playGameBtn != null)
             playGameBtn.onClick.AddListener(() => PlayGame());
+
+        if (playersConnectedText == null)
+            NetworkManager.Instance.playersConnectedText = playersConnectedText;
 
         Debug.Log("UI Initialized");
     }

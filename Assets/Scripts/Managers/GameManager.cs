@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void RegisterUI(GameObject win, GameObject lose)
@@ -57,11 +57,16 @@ public class GameManager : MonoBehaviour
 
     public void FinishMatch(PlayerRef winner)
     {
+        if (!Object.HasStateAuthority)
+            return;
+
         if (Instance == null)
         {
             Debug.LogError("GameManager.Instance is NULL");
             return;
         }
+
+        FreezePlayers();
 
         RPC_MatchFinished(winner);
     }
@@ -84,8 +89,6 @@ public class GameManager : MonoBehaviour
         }
 
         resultShown = true;
-
-        FreezePlayers();
 
         var localPlayer = FindLocalPlayer();
 

@@ -185,6 +185,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
                 runner.LoadScene("Arena1v1");
             }
         }
+        //runner.LoadScene("Arena1v1");
     }
 
     // PLAYER CONTROL LEFT THE ROOM
