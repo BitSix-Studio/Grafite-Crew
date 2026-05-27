@@ -12,25 +12,20 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public static NetworkManager Instance;
+    public static NetworkManager Instance; 
 
-    private NetworkRunner runner;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
+    private NetworkRunner runner; 
+    
+    private void Awake() 
+    { 
+        if (Instance != null && Instance != this) 
+        { 
             Destroy(gameObject);
-            return;
-        }
+            return; 
+        } 
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private async void Start()
-    {
-        await StartLobby();
+        DontDestroyOnLoad(gameObject); 
     }
 
     // CREATE AND ENTER LOBBY GAME
@@ -38,32 +33,33 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner != null)
         {
-            await runner.Shutdown();
-            Destroy(runner.gameObject);
-            runner = null;
+            Debug.Log("Already in lobby");
+            return;
         }
+
+        await ShutdownRunner();
 
         var runnerObj = new GameObject("NetworkRunner");
         runner = runnerObj.AddComponent<NetworkRunner>();
 
-        runner.ProvideInput = true;
+        runnerObj.AddComponent<NetworkSceneManagerDefault>();
+
+        runner.ProvideInput = true; 
         runner.AddCallbacks(this);
 
         await runner.JoinSessionLobby(SessionLobby.Shared);
 
-        Debug.Log("Entrou no Lobby");
+        Debug.Log("Entered Lobby");
     }
 
     // CREATE ROOM
     public async Task StartHost(string roomName)
     {
-        await StartLobby();
-
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Host,
             SessionName = roomName,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+            SceneManager = runner.GetComponent<NetworkSceneManagerDefault>(),
             PlayerCount = 2
         });
     }
@@ -71,9 +67,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // JOIN ROOM
     public async void JoinGame(string roomName)
     {
-        if (runner == null)
-            StartLobby();
-
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
@@ -81,34 +74,50 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
+    public async Task ShutdownRunner()
+    {
+        if (runner == null)
+            return;
+
+        runner.RemoveCallbacks(this);
+
+        await runner.Shutdown();
+
+        Destroy(runner.gameObject, 0.1f);
+
+        runner = null;
+
+        await Task.Delay(500);
+    }
+
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        
+
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
-        
+
     }
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
     {
-        
+
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
     {
-        
+
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-        
+
     }
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
-        
+
     }
 
     // PLAYER INPUTS CALL
@@ -123,7 +132,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (Input.GetKey(KeybindingManager.Instance.keyRight))
             data.targetDirection = Vector3.right;
 
-        if(Input.GetKey(KeybindingManager.Instance.keyUp))
+        if (Input.GetKey(KeybindingManager.Instance.keyUp))
             data.buttons.Set(InputButtons.Jump, true);
 
         //MOBILE
@@ -145,17 +154,17 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
-        
+
     }
 
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-        
+
     }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-        
+
     }
 
     public NetworkPrefabRef playerPrefab;
@@ -200,12 +209,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
-        
+
     }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-        
+
     }
 
     // WHEN THE SCENE FINISHES LOADING
@@ -243,7 +252,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        
+
     }
 
     public event Action<List<SessionInfo>> SessionListUpdated;
@@ -255,11 +264,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        
+
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
-        
+
     }
 }

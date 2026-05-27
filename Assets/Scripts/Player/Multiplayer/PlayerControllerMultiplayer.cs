@@ -16,18 +16,31 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     public bool jumpPressedThisTick { get; private set; }
     public bool jumpConsumed = false;
 
-    private bool resultShown;
-
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
 
         canMove = true;
 
-        cam = Camera.main.GetComponent<CameraFocus>();
-
         if (!Object.HasInputAuthority)
             return;
+
+        StartCoroutine(SetupCamera());
+    }
+
+    private IEnumerator SetupCamera()
+    {
+        while (Camera.main == null)
+        {
+            yield return null;
+        }
+
+        cam = Camera.main.GetComponent<CameraFocus>();
+
+        if (cam == null)
+        {
+            yield break;
+        }
 
         if (PlayerIndex == 0)
         {
