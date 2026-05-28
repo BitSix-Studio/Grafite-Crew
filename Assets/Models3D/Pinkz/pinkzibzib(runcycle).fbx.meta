@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 380a28a2413f3c5439d573385d49d446
+guid: a37bbdd42fa90734097c27137db59c8c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -38,7 +38,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
+      name: Run
       takeName: Armature|ArmatureAction
       internalID: 4781951162920444690
       firstFrame: 0
