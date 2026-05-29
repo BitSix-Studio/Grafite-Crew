@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +11,7 @@ using UnityEngine.UI;
 public class ManagerUI : MonoBehaviour
 {
     public static ManagerUI Instance;
+
     [Header("UI of Connection Panel")]
     public GameObject networkConnectPanel;
     public TMP_InputField inputRoom;
@@ -24,6 +24,9 @@ public class ManagerUI : MonoBehaviour
 
     [Header("Menu Buttons")]
     public Button playGameBtn;
+
+    [Header("Reference of Choose Character")]
+    public ChooseCharacterManager chooseCharacterManager;
 
     private void Awake()
     {
@@ -92,7 +95,8 @@ public class ManagerUI : MonoBehaviour
     public void PlayGame() 
     { 
         networkConnectPanel.SetActive(true); 
-        NetworkManager.Instance.playersConnectedText = playersConnectedText; 
+        NetworkManager.Instance.playersConnectedText = playersConnectedText;
+        NetworkManager.Instance.playerPrefab = chooseCharacterManager.prefabChar;
     }
 
     public async void CreateRoom() 

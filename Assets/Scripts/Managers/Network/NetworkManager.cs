@@ -179,22 +179,22 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             return;
 
         //CHECK THE NUMBER OF PLAYERS
-        int playerCount = runner.ActivePlayers.Count();
+        //int playerCount = runner.ActivePlayers.Count();
 
-        if (playerCount < 2)
-        {
-            playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
-        }
-        else if (playerCount >= 2)
-        {
-            playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
+        //if (playerCount < 2)
+        //{
+        //    playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
+        //}
+        //else if (playerCount >= 2)
+        //{
+        //    playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
 
-            if (runner.IsSceneAuthority)
-            {
-                runner.LoadScene("Arena1v1");
-            }
-        }
-        //runner.LoadScene("Arena1v1");
+        //    if (runner.IsSceneAuthority)
+        //    {
+        //        runner.LoadScene("Arena1v1");
+        //    }
+        //}
+        runner.LoadScene("Arena1v1");
     }
 
     // PLAYER CONTROL LEFT THE ROOM
@@ -242,7 +242,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             int index = player.RawEncoded % spawnPoints.Length;
             Vector3 spawnPosition = spawnPoints[index].position;
 
-            var obj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
+            var obj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.Euler(0, -90, 0), player);
 
             obj.GetComponent<PlayerControllerMultiplayer>().PlayerIndex = index;
 
