@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerControllerMultiplayer : NetworkBehaviour
@@ -9,6 +10,7 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
     [HideInInspector] public NetworkCharacterController networkController;
     private Animator animator;
+    [SerializeField] private GoUpElevator upElevator;
 
     [Header("Camera Player Config")]
     private CameraFocus cam;
@@ -20,27 +22,21 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     [Range(0f, 0.1f)] public float magnitudeLimitForStopAnimations;
     private int facingDirection = 1;
 
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask groundLayer;
+
     [HideInInspector] public NetworkButtons previousButtons;
     public bool jumpPressedThisTick { get; private set; }
 
-    private enum JumpState
-    {
-        Grounded,
-        JumpStart,
-        InAir,
-        Landing
-    }
-
-    private JumpState jumpState;
-
     private bool wasGrounded;
-    private bool justLanded;
 
     public override void Spawned()
     {
         networkController = GetComponent<NetworkCharacterController>();
         animator = GetComponent<Animator>();
+        upElevator = GetComponent<GoUpElevator>();
 
+        wasGrounded = IsGrounded();
         canMove = true;
 
         if (!Object.HasInputAuthority)
@@ -164,38 +160,37 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     private void ChangeJumpAnimations()
     {
         bool isGrounded = IsGrounded();
-        float yVel = networkController.Velocity.y;
+        float verticalSpeed = networkController.Velocity.y;
 
-        justLanded = !isGrounded && wasGrounded && yVel < 0f;
+        animator.SetBool("IsGrounded", isGrounded);
+        animator.SetFloat("VerticalSpeed", verticalSpeed);
 
-        if (isGrounded)
+        if (isGrounded && !wasGrounded)
         {
-            jumpState = JumpState.Grounded;
-        }
-        else
-        {
-            if (yVel > 0.1f)
-            {
-                jumpState = JumpState.JumpStart;
-            }
-            else if (yVel < -0.1f)
-            {
-                if (justLanded)
-                    jumpState = JumpState.Landing;
-                else
-                    jumpState = JumpState.InAir;
-            }
+            animator.SetTrigger("Land");
         }
 
         wasGrounded = isGrounded;
-
-        animator.SetInteger("JumpState", (int)jumpState);
     }
 
     public bool IsGrounded()
     {
-        //return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        return networkController.Grounded;
+        return Physics.Raycast(upElevator.elevatorCheckPoint.position, Vector3.down, groundCheckDistance, groundLayer);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (upElevator == null)
+            upElevator = GetComponent<GoUpElevator>();
+
+        if (upElevator == null || upElevator.elevatorCheckPoint == null)
+            return;
+
+        Vector3 start = upElevator.elevatorCheckPoint.position;
+        Vector3 end = start + Vector3.down * groundCheckDistance;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(start, end);
     }
 
     public void UpdateElevatorCamera(float offset)

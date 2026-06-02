@@ -13,20 +13,22 @@ MonoBehaviour:
   m_Name: CharactersData
   m_EditorClassIdentifier: 
   characters:
-  - characterName: PINKZIBZIB
+  - characterName: PINKZZ'IB'ZIB
     characterIcon: {fileID: 21300000, guid: 831f6b7636f8f554490834476829ea57, type: 3}
-    characterNameHability: Gravidade Zero
-    characterDescription: "Flutua sobre os obst\xE1culos com um Mega Pulo"
+    characterNameHability: De Outro Mundo!
+    characterDescription: Pinkzz'ib'zib altera a gravidade, possibilitando um salto
+      longo a si mesma
     characterPrefab:
       RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
     prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
   - characterName: CERVIDAE
     characterIcon: {fileID: 21300000, guid: edd93de78a8ad7445a70cdba9bb32675, type: 3}
-    characterNameHability: 
-    characterDescription: 
+    characterNameHability: Almiscarado
+    characterDescription: "Cervidae consegue atravessar obst\xE1culos sem perder
+      velocidade!"
     characterPrefab:
-      RawGuidValue: afaf277819e1d60408c2392783a7c4d0
-    prefabCharDisplay: {fileID: 9198154425366013241, guid: afaf277819e1d60408c2392783a7c4d0, type: 3}
+      RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
+    prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
   - characterName: CHIQUI
     characterIcon: {fileID: 21300000, guid: 130642f41d301d843b68410e11c51dc5, type: 3}
     characterNameHability: Grafite Bomb
@@ -37,15 +39,17 @@ MonoBehaviour:
     prefabCharDisplay: {fileID: 9198154425366013241, guid: afaf277819e1d60408c2392783a7c4d0, type: 3}
   - characterName: CALLIE
     characterIcon: {fileID: 21300000, guid: 1f339e1a559b1564996633c9d53ac48f, type: 3}
-    characterNameHability: 
-    characterDescription: 
+    characterNameHability: KaBoom Bap
+    characterDescription: "Callie faz seus fones emitirem um som de abalar, atordoando
+      qualquer um que n\xE3o seja ela mesma"
     characterPrefab:
       RawGuidValue: afaf277819e1d60408c2392783a7c4d0
     prefabCharDisplay: {fileID: 9198154425366013241, guid: afaf277819e1d60408c2392783a7c4d0, type: 3}
-  - characterName: LEORUSH
+  - characterName: "L\xC9ORUSH"
     characterIcon: {fileID: 21300000, guid: 2a0fd65a717588948856c8e9a8b9a6e9, type: 3}
-    characterNameHability: 
-    characterDescription: 
+    characterNameHability: Hora do Rush
+    characterDescription: "L\xE9o aumenta sua velocidade de movimento bruscamente,
+      simulando seus tiros de 100 metros"
     characterPrefab:
       RawGuidValue: afaf277819e1d60408c2392783a7c4d0
     prefabCharDisplay: {fileID: 9198154425366013241, guid: afaf277819e1d60408c2392783a7c4d0, type: 3}

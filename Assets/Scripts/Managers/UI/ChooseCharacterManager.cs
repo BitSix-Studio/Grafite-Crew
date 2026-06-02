@@ -7,15 +7,19 @@ using UnityEngine.UI;
 
 public class ChooseCharacterManager : MonoBehaviour
 {
+    [Header("Characters Database Reference")]
     public CharacterDatabase characterDB;
 
+    [Header("UI References in the Scene")]
     public TextMeshProUGUI nameText;
     public Image iconChar;
     public TextMeshProUGUI nameHabilityText, descriptionText;
     public NetworkPrefabRef prefabChar;
     public GameObject prefabCharDisplay;
 
+    [Header("Local for Display Character")]
     public Transform localCharacterDisplay;
+
     private static Vector3 rotationCharDisplay = new(0f, -40f, 0f);
     private static Vector3 scaleCharDisplay = new(40f, 40f, 40f);
 
@@ -54,6 +58,11 @@ public class ChooseCharacterManager : MonoBehaviour
 
     private void UpdateCharacter(int selected)
     {
+        if (lastPrefabCharDisplay != null)
+        {
+            Destroy(lastPrefabCharDisplay);
+        }
+
         Character character = characterDB.GetCharacter(selected);
         nameText.text = character.characterName;
         iconChar.sprite = character.characterIcon;
@@ -65,5 +74,7 @@ public class ChooseCharacterManager : MonoBehaviour
         var characterObj = Instantiate(prefabCharDisplay, localCharacterDisplay);
         characterObj.transform.rotation = Quaternion.Euler(rotationCharDisplay);
         characterObj.transform.localScale = scaleCharDisplay;
+
+        lastPrefabCharDisplay = characterObj;
     }
 }

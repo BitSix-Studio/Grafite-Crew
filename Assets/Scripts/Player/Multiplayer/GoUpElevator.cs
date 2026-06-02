@@ -15,7 +15,7 @@ public class GoUpElevator : NetworkBehaviour
 
     [SerializeField] private LayerMask elevatorLayer;
     [SerializeField] private float checkRadius = 0.5f;
-    [SerializeField] private Transform elevatorCheckPoint;
+    public Transform elevatorCheckPoint;
 
     [Networked] private NetworkBool IsUsingElevator { get; set; }
     [Networked] private TickTimer MoveTimer { get; set; }

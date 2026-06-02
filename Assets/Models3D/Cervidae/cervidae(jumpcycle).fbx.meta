@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8fb24012d22cc374290851115070db99
+guid: 9afda0c66e055354a90fd706361361d3
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: m_char
-    second: {fileID: 2100000, guid: 6a8ab14f3bd256149b62edafaf27f00c, type: 2}
+      name: Material
+    second: {fileID: 2100000, guid: 9ccd2c437d3e624468c7065968c96992, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cervidae_img
+    second: {fileID: 2100000, guid: 0250e112dd513ff478fade52e93b8d39, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tex_img_face
+    second: {fileID: 2100000, guid: 33cb9d13bdddf574d83222666e21b857, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,11 +48,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: JumpInAir
+      name: Jump
       takeName: Armature|ArmatureAction
       internalID: 4781951162920444690
       firstFrame: 0
-      lastFrame: 12
+      lastFrame: 36
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
