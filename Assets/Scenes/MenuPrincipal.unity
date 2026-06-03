@@ -480,9 +480,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab:
-    RawGuidValue: afaf277819e1d60408c2392783a7c4d0
+  - RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
+  - RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
+  - RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
+  - RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
+  - RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
   spawnPoints: []
   playersConnectedText: {fileID: 262347194}
+  characterDB: {fileID: 11400000, guid: 8352de0b468278146a2b6d7af20cd6ef, type: 2}
 --- !u!1 &145615193
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,6 +4262,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118173352}
   m_CullTransparentMesh: 1
+--- !u!1 &2140028839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2140028840}
+  - component: {fileID: 2140028842}
+  - component: {fileID: 2140028841}
+  m_Layer: 0
+  m_Name: CharacterSelectionNetwork
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2140028840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140028839}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.244006, y: 5.5579934, z: -5.3471646}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2140028841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140028839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7065a94b742ce1e4abd0f646d8853088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2140028842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140028839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 413676705
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2140028841}
+  ForceRemoteRenderTimeframe: 0
 --- !u!222 &109578401060917564
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5345,3 +5414,4 @@ SceneRoots:
   - {fileID: 1569227705}
   - {fileID: 1478597392}
   - {fileID: 1721421311}
+  - {fileID: 2140028840}

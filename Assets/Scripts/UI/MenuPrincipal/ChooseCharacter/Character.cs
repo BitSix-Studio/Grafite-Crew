@@ -6,6 +6,8 @@ using Fusion;
 [System.Serializable]
 public class Character
 {
+    public int characterId;
+
     public string characterName;
     public Sprite characterIcon;
     public string characterNameHability;

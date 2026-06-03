@@ -64,6 +64,9 @@ public class ChooseCharacterManager : MonoBehaviour
         }
 
         Character character = characterDB.GetCharacter(selected);
+
+        PlayerSelection.CharacterId = character.characterId;
+
         nameText.text = character.characterName;
         iconChar.sprite = character.characterIcon;
         nameHabilityText.text = character.characterNameHability;

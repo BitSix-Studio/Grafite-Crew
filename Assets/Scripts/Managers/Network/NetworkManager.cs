@@ -62,15 +62,20 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = runner.GetComponent<NetworkSceneManagerDefault>(),
             PlayerCount = 2
         });
+
+        playerSelections[runner.LocalPlayer] = PlayerSelection.CharacterId;
     }
 
     // JOIN ROOM
     public async void JoinGame(string roomName)
     {
+        byte[] token = BitConverter.GetBytes(PlayerSelection.CharacterId);
+
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
-            SessionName = roomName
+            SessionName = roomName,
+            ConnectionToken = token
         });
     }
 
@@ -167,34 +172,54 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public NetworkPrefabRef playerPrefab;
     [HideInInspector] public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private Dictionary<PlayerRef, int> playerSelections = new Dictionary<PlayerRef, int>();
+
     public Transform[] spawnPoints;
     public TextMeshProUGUI playersConnectedText;
 
     // PLAYER CONTROL ENTERING THE ROOM
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        Debug.Log($"Player entrou: {player}");
+        Debug.Log($"LocalPlayer: {runner.LocalPlayer}");
+
         if (!runner.IsServer)
             return;
 
+        if (player != runner.LocalPlayer)
+        {
+            byte[] token = runner.GetPlayerConnectionToken(player);
+
+            Debug.Log($"Token recebido? {(token == null ? "NULL" : token.Length.ToString())}");
+
+            if (token != null && token.Length >= 4)
+            {
+                int characterId = BitConverter.ToInt32(token, 0);
+
+                Debug.Log($"Character recebido: {characterId}");
+
+                playerSelections[player] = characterId;
+            }
+        }
+
         //CHECK THE NUMBER OF PLAYERS
-        //int playerCount = runner.ActivePlayers.Count();
+        int playerCount = runner.ActivePlayers.Count();
 
-        //if (playerCount < 2)
-        //{
-        //    playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
-        //}
-        //else if (playerCount >= 2)
-        //{
-        //    playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
+        if (playerCount < 2)
+        {
+            playersConnectedText.text = $"Esperando Adversário... ({playerCount}/2)";
+        }
+        else if (playerCount >= 2)
+        {
+            playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
 
-        //    if (runner.IsSceneAuthority)
-        //    {
-        //        runner.LoadScene("Arena1v1");
-        //    }
-        //}
-        runner.LoadScene("Arena1v1");
+            if (runner.IsSceneAuthority)
+            {
+                runner.LoadScene("Arena1v1");
+            }
+        }
+        //runner.LoadScene("Arena1v1");
     }
 
     // PLAYER CONTROL LEFT THE ROOM
@@ -226,6 +251,30 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         StartCoroutine(SpawnPlayers(runner));
     }
 
+    [SerializeField] private CharacterDatabase characterDB;
+
+    private NetworkPrefabRef GetCharacterPrefab(int characterId)
+    {
+        foreach (var character in characterDB.characters)
+        {
+            if (character.characterId == characterId)
+                return character.characterPrefab;
+        }
+
+        Debug.LogError($"Character ID {characterId} não encontrado!");
+
+        return default;
+    }
+
+    public void RegisterCharacter(PlayerRef player, int characterId)
+    {
+        playerSelections[player] = characterId;
+
+        Debug.Log(
+            $"Jogador {player} escolheu personagem {characterId}"
+        );
+    }
+
     private IEnumerator SpawnPlayers(NetworkRunner runner)
     {
         yield return new WaitForSeconds(0.1f);
@@ -242,7 +291,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             int index = player.RawEncoded % spawnPoints.Length;
             Vector3 spawnPosition = spawnPoints[index].position;
 
-            var obj = runner.Spawn(playerPrefab, spawnPosition, Quaternion.Euler(0, -90, 0), player);
+            if (!playerSelections.TryGetValue(player, out int characterId))
+            {
+                Debug.LogWarning($"Personagem não encontrado para {player}");
+                characterId = 0;
+            }
+
+            NetworkPrefabRef prefab = GetCharacterPrefab(characterId);
+
+            var obj = runner.Spawn(prefab, spawnPosition, Quaternion.Euler(0, -90, 0), player);
 
             obj.GetComponent<PlayerControllerMultiplayer>().PlayerIndex = index;
 

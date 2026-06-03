@@ -96,7 +96,6 @@ public class ManagerUI : MonoBehaviour
     { 
         networkConnectPanel.SetActive(true); 
         NetworkManager.Instance.playersConnectedText = playersConnectedText;
-        NetworkManager.Instance.playerPrefab = chooseCharacterManager.prefabChar;
     }
 
     public async void CreateRoom() 
