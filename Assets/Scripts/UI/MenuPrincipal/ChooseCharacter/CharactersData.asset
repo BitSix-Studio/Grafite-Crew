@@ -22,7 +22,7 @@ MonoBehaviour:
     characterPrefab:
       RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
     prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
-  - characterId: 0
+  - characterId: 1
     characterName: CERVIDAE
     characterIcon: {fileID: 21300000, guid: edd93de78a8ad7445a70cdba9bb32675, type: 3}
     characterNameHability: Almiscarado
@@ -31,7 +31,7 @@ MonoBehaviour:
     characterPrefab:
       RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
     prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
-  - characterId: 0
+  - characterId: 2
     characterName: CHIQUI
     characterIcon: {fileID: 21300000, guid: 130642f41d301d843b68410e11c51dc5, type: 3}
     characterNameHability: Grafite Bomb
@@ -40,7 +40,7 @@ MonoBehaviour:
     characterPrefab:
       RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
     prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
-  - characterId: 0
+  - characterId: 3
     characterName: CALLIE
     characterIcon: {fileID: 21300000, guid: 1f339e1a559b1564996633c9d53ac48f, type: 3}
     characterNameHability: KaBoom Bap
@@ -49,7 +49,7 @@ MonoBehaviour:
     characterPrefab:
       RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
     prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
-  - characterId: 0
+  - characterId: 4
     characterName: "L\xC9ORUSH"
     characterIcon: {fileID: 21300000, guid: 2a0fd65a717588948856c8e9a8b9a6e9, type: 3}
     characterNameHability: Hora do Rush

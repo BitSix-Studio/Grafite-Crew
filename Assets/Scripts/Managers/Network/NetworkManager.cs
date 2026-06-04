@@ -14,8 +14,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public static NetworkManager Instance; 
 
-    private NetworkRunner runner; 
-    
+    private NetworkRunner runner;
+
+    [SerializeField] private NetworkPrefabRef characterSelectionNetworkPrefab;
+
     private void Awake() 
     { 
         if (Instance != null && Instance != this) 
@@ -63,19 +65,18 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             PlayerCount = 2
         });
 
+        runner.Spawn(characterSelectionNetworkPrefab, Vector3.zero, Quaternion.identity);
+
         playerSelections[runner.LocalPlayer] = PlayerSelection.CharacterId;
     }
 
     // JOIN ROOM
     public async void JoinGame(string roomName)
     {
-        byte[] token = BitConverter.GetBytes(PlayerSelection.CharacterId);
-
         await runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
-            SessionName = roomName,
-            ConnectionToken = token
+            SessionName = roomName
         });
     }
 
@@ -97,7 +98,21 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
+        StartCoroutine(SendCharacterChoice());
+    }
 
+    private IEnumerator SendCharacterChoice()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log(
+            $"Instance = {CharacterSelectionNetwork.Instance}"
+        );
+
+        CharacterSelectionNetwork.Instance
+            .RPC_SendCharacterChoice(
+                PlayerSelection.CharacterId
+            );
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
@@ -181,27 +196,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     // PLAYER CONTROL ENTERING THE ROOM
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"Player entrou: {player}");
-        Debug.Log($"LocalPlayer: {runner.LocalPlayer}");
-
         if (!runner.IsServer)
             return;
-
-        if (player != runner.LocalPlayer)
-        {
-            byte[] token = runner.GetPlayerConnectionToken(player);
-
-            Debug.Log($"Token recebido? {(token == null ? "NULL" : token.Length.ToString())}");
-
-            if (token != null && token.Length >= 4)
-            {
-                int characterId = BitConverter.ToInt32(token, 0);
-
-                Debug.Log($"Character recebido: {characterId}");
-
-                playerSelections[player] = characterId;
-            }
-        }
 
         //CHECK THE NUMBER OF PLAYERS
         int playerCount = runner.ActivePlayers.Count();
@@ -213,13 +209,22 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         else if (playerCount >= 2)
         {
             playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
-
-            if (runner.IsSceneAuthority)
-            {
-                runner.LoadScene("Arena1v1");
-            }
         }
         //runner.LoadScene("Arena1v1");
+    }
+
+    private bool AllPlayersSelected()
+    {
+        if (playerSelections.Count != runner.ActivePlayers.Count())
+            return false;
+
+        foreach (var player in runner.ActivePlayers)
+        {
+            if (!playerSelections.ContainsKey(player))
+                return false;
+        }
+
+        return true;
     }
 
     // PLAYER CONTROL LEFT THE ROOM
@@ -253,6 +258,29 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] private CharacterDatabase characterDB;
 
+    public void RegisterCharacter(PlayerRef player, int characterId)
+    {
+        Debug.Log($"REGISTRANDO {player} => {characterId}");
+
+        playerSelections[player] = characterId;
+
+        CheckStartMatch();
+    }
+
+    private void CheckStartMatch()
+    {
+        if (!runner.IsServer)
+            return;
+
+        if (runner.ActivePlayers.Count() < 2)
+            return;
+
+        if (!AllPlayersSelected())
+            return;
+
+        runner.LoadScene("Arena1v1");
+    }
+
     private NetworkPrefabRef GetCharacterPrefab(int characterId)
     {
         foreach (var character in characterDB.characters)
@@ -266,18 +294,13 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         return default;
     }
 
-    public void RegisterCharacter(PlayerRef player, int characterId)
-    {
-        playerSelections[player] = characterId;
-
-        Debug.Log(
-            $"Jogador {player} escolheu personagem {characterId}"
-        );
-    }
-
     private IEnumerator SpawnPlayers(NetworkRunner runner)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitUntil(() =>
+        {
+            return playerSelections.Count ==
+                   runner.ActivePlayers.Count();
+        });
 
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
@@ -293,7 +316,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
             if (!playerSelections.TryGetValue(player, out int characterId))
             {
-                Debug.LogWarning($"Personagem não encontrado para {player}");
+                Debug.LogWarning($"Personagem não registrado para {player}");
+
                 characterId = 0;
             }
 
