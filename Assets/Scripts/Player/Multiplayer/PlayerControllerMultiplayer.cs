@@ -21,6 +21,11 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     public float directionChangeSpeed;
     [Range(0f, 0.1f)] public float magnitudeLimitForStopAnimations;
     private int facingDirection = 1;
+    [Networked] public NetworkBool IsRunning { get; set; }
+
+    [Networked] public float VerticalSpeed { get; set; }
+
+    [Networked] public NetworkBool IsGroundedNet { get; set; }
 
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundLayer;
@@ -29,6 +34,7 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     public bool jumpPressedThisTick { get; private set; }
 
     private bool wasGrounded;
+    private bool initialized;
 
     public override void Spawned()
     {
@@ -38,6 +44,7 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
         wasGrounded = IsGrounded();
         canMove = true;
+        initialized = true;
 
         if (!Object.HasInputAuthority)
             return;
@@ -91,9 +98,6 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
                 JumpPlayer();
 
-                ChangeAnimations();
-                ChangeJumpAnimations();
-
                 // LOCKS THE Z-AXIS
                 Vector3 pos = transform.position;
                 pos.z = 0;
@@ -102,6 +106,15 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
                 previousButtons = data.buttons;
             }
         }
+    }
+
+    private void Update()
+    {
+        if (!initialized)
+            return;
+
+        ChangeMoveAnimations();
+        ChangeJumpAnimations();
     }
 
     void MovePlayer(Vector3 dir)
@@ -135,11 +148,11 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
         }
     }
 
-    private void ChangeAnimations()
+    private void ChangeMoveAnimations()
     {
-        bool isMoving = networkController.Velocity.magnitude > magnitudeLimitForStopAnimations;
+        IsRunning = networkController.Velocity.magnitude > magnitudeLimitForStopAnimations;
 
-        if (isMoving)
+        if (IsRunning)
         {
             animator.SetBool("IsRun", true);
         }
@@ -159,18 +172,18 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
     private void ChangeJumpAnimations()
     {
-        bool isGrounded = IsGrounded();
-        float verticalSpeed = networkController.Velocity.y;
+        IsGroundedNet = IsGrounded();
+        VerticalSpeed = networkController.Velocity.y;
 
-        animator.SetBool("IsGrounded", isGrounded);
-        animator.SetFloat("VerticalSpeed", verticalSpeed);
+        animator.SetBool("IsGrounded", IsGroundedNet);
+        animator.SetFloat("VerticalSpeed", VerticalSpeed);
 
-        if (isGrounded && !wasGrounded)
+        if (IsGroundedNet && !wasGrounded)
         {
             animator.SetTrigger("Land");
         }
 
-        wasGrounded = isGrounded;
+        wasGrounded = IsGroundedNet;
     }
 
     public bool IsGrounded()

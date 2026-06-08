@@ -8,10 +8,15 @@ public class Character
 {
     public int characterId;
 
+    [Header("Character Info")]
     public string characterName;
     public Sprite characterIcon;
-    public string characterNameHability;
-    public string characterDescription;
     public NetworkPrefabRef characterPrefab;
     public GameObject prefabCharDisplay;
+
+    [Header("Hability Character Info")]
+    public string characterNameHability;
+    public string characterDescription;
+    public Sprite abilityIcon;
+    public AbilityData ability;
 }

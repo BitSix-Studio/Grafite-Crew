@@ -28,6 +28,10 @@ public class ManagerUI : MonoBehaviour
     [Header("Reference of Choose Character")]
     public ChooseCharacterManager chooseCharacterManager;
 
+    [Header("UI of ARENA")]
+    public GameObject winPanel;
+    public GameObject losePanel;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -68,8 +72,15 @@ public class ManagerUI : MonoBehaviour
             waitConnectPlayersPanel.SetActive(false); 
         
         if (playGameBtn != null) 
-            playGameBtn.onClick.AddListener(() => PlayGame()); 
-        
+            playGameBtn.onClick.AddListener(() => PlayGame());
+
+        GameManager.Instance.RegisterUI(winPanel, losePanel);
+
+        if (winPanel != null)
+            winPanel.SetActive(false);
+        if (losePanel != null)
+            losePanel.SetActive(false);
+
         Debug.Log("UI Initialized"); 
     }
 

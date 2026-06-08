@@ -12,7 +12,7 @@ public class ChooseCharacterManager : MonoBehaviour
 
     [Header("UI References in the Scene")]
     public TextMeshProUGUI nameText;
-    public Image iconChar;
+    public Image iconChar, iconAbility;
     public TextMeshProUGUI nameHabilityText, descriptionText;
     public NetworkPrefabRef prefabChar;
     public GameObject prefabCharDisplay;
@@ -69,6 +69,7 @@ public class ChooseCharacterManager : MonoBehaviour
 
         nameText.text = character.characterName;
         iconChar.sprite = character.characterIcon;
+        iconAbility.sprite = character.abilityIcon;
         nameHabilityText.text = character.characterNameHability;
         descriptionText.text = character.characterDescription;
         prefabChar = character.characterPrefab;

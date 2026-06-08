@@ -210,21 +210,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             playersConnectedText.text = $"Adversário Encontrado! Iniciando... ({playerCount}/2)";
         }
-        //runner.LoadScene("Arena1v1");
-    }
-
-    private bool AllPlayersSelected()
-    {
-        if (playerSelections.Count != runner.ActivePlayers.Count())
-            return false;
-
-        foreach (var player in runner.ActivePlayers)
-        {
-            if (!playerSelections.ContainsKey(player))
-                return false;
-        }
-
-        return true;
     }
 
     // PLAYER CONTROL LEFT THE ROOM
@@ -258,6 +243,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] private CharacterDatabase characterDB;
 
+    public Character GetCharacterData(int characterId)
+    {
+        return characterDB.GetCharacter(characterId);
+    }
+
     public void RegisterCharacter(PlayerRef player, int characterId)
     {
         Debug.Log($"REGISTRANDO {player} => {characterId}");
@@ -281,17 +271,18 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         runner.LoadScene("Arena1v1");
     }
 
-    private NetworkPrefabRef GetCharacterPrefab(int characterId)
+    private bool AllPlayersSelected()
     {
-        foreach (var character in characterDB.characters)
+        if (playerSelections.Count != runner.ActivePlayers.Count())
+            return false;
+
+        foreach (var player in runner.ActivePlayers)
         {
-            if (character.characterId == characterId)
-                return character.characterPrefab;
+            if (!playerSelections.ContainsKey(player))
+                return false;
         }
 
-        Debug.LogError($"Character ID {characterId} não encontrado!");
-
-        return default;
+        return true;
     }
 
     private IEnumerator SpawnPlayers(NetworkRunner runner)
@@ -325,10 +316,27 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
             var obj = runner.Spawn(prefab, spawnPosition, Quaternion.Euler(0, -90, 0), player);
 
-            obj.GetComponent<PlayerControllerMultiplayer>().PlayerIndex = index;
+            var controller = obj.GetComponent<PlayerControllerMultiplayer>();
+            controller.PlayerIndex = index;
+            
+            var ability = obj.GetComponent<CharacterAbilityController>();
+            ability.CharacterId = characterId;
 
             spawnedCharacters[player] = obj;
         }
+    }
+
+    private NetworkPrefabRef GetCharacterPrefab(int characterId)
+    {
+        foreach (var character in characterDB.characters)
+        {
+            if (character.characterId == characterId)
+                return character.characterPrefab;
+        }
+
+        Debug.LogError($"Character ID {characterId} não encontrado!");
+
+        return default;
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)

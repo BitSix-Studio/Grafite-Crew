@@ -73,9 +73,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: VerticalSpeed
     m_EventTreshold: 0.1
-  - m_ConditionMode: 1
-    m_ConditionEvent: Land
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3725863780371332842}
   m_Solo: 0
@@ -101,16 +98,19 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: IsRun
     m_EventTreshold: 0
-  - m_ConditionMode: 4
-    m_ConditionEvent: VerticalSpeed
-    m_EventTreshold: 0.1
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsGrounded
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Land
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6295486101098393354}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.2
+  m_TransitionDuration: 0.3
   m_TransitionOffset: 0
   m_ExitTime: 0.9
   m_HasExitTime: 0
@@ -185,7 +185,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Run
-  m_Speed: 1
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8967788899586741456}
@@ -199,7 +199,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4781951162920444690, guid: 1734c1d7fd7d4b94296cb642791c824f, type: 3}
+  m_Motion: {fileID: 4781951162920444690, guid: 3495074c983e77641a0de5c8a0d62663, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -262,16 +262,19 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: IsRun
     m_EventTreshold: 0
-  - m_ConditionMode: 4
-    m_ConditionEvent: VerticalSpeed
-    m_EventTreshold: 0.1
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsGrounded
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Land
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1227768357178610131}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.2
+  m_TransitionDuration: 0.3
   m_TransitionOffset: 0
   m_ExitTime: 0.9
   m_HasExitTime: 0
@@ -293,9 +296,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: VerticalSpeed
     m_EventTreshold: 0.1
-  - m_ConditionMode: 1
-    m_ConditionEvent: Land
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3725863780371332842}
   m_Solo: 0
@@ -318,7 +318,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Jump
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6993375461335063199}

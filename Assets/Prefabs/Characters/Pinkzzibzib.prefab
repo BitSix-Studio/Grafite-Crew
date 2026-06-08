@@ -125,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 380a28a2413f3c5439d573385d49d446, type: 3}
       propertyPath: m_Name
-      value: Pinkzibzib
+      value: Pinkzzibzib
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 380a28a2413f3c5439d573385d49d446, type: 3}
       propertyPath: m_TagString
@@ -150,6 +150,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 380a28a2413f3c5439d573385d49d446, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3172647447474654510}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 380a28a2413f3c5439d573385d49d446, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6542061787648986389}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 380a28a2413f3c5439d573385d49d446, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3086945043438221220}
@@ -192,6 +195,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: -7039723206220649544}
   - {fileID: 3172647447474654510}
+  - {fileID: 6542061787648986389}
   - {fileID: 3086945043438221220}
   ForceRemoteRenderTimeframe: 0
 --- !u!95 &2650944983615959476
@@ -231,6 +235,7 @@ MonoBehaviour:
     _value: 0
   networkController: {fileID: 0}
   upElevator: {fileID: 3172647447474654510}
+  _CharacterId: 0
   _PlayerIndex: 0
   directionChangeSpeed: 1
   magnitudeLimitForStopAnimations: 0.02
@@ -262,6 +267,18 @@ MonoBehaviour:
     RawGuidValue: b912af04d50f3af488b2c9b4a7cc33fd
   numCorridorsActual: 0
   maxNumCorridors: 5
+--- !u!114 &6542061787648986389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4210512998854831798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4fec341f252b4a45b7ec470f44aeb8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3086945043438221220
 MonoBehaviour:
   m_ObjectHideFlags: 0

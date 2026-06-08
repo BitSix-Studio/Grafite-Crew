@@ -27,6 +27,7 @@ public class GoUpElevator : NetworkBehaviour
 
     private bool nextIsRight;
 
+    private CorridorController lastCreatedCorridor;
     public int numCorridorsActual = 0;
     public int maxNumCorridors;
 
@@ -67,8 +68,8 @@ public class GoUpElevator : NetworkBehaviour
         if (MoveTimer.Expired(Runner))
         {
             transform.position = TargetPos;
-            player.UpdateElevatorCamera(targetPositionFloor);
 
+            player.UpdateElevatorCamera(targetPositionFloor);
             player.ResetElevatorCamera();
 
             player.canMove = true;
@@ -101,8 +102,9 @@ public class GoUpElevator : NetworkBehaviour
         Vector3 nextCorridorPos = AddNextCorridor;
 
         NetworkObject newCorridor = Runner.Spawn(prefabCorridor, nextCorridorPos, Quaternion.identity);
-        
+
         CorridorController corridor = newCorridor.GetComponent<CorridorController>();
+        lastCreatedCorridor = corridor;
 
         corridor.Init(player.GetComponent<NetworkObject>());
 

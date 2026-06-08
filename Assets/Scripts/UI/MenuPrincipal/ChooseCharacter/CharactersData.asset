@@ -16,45 +16,44 @@ MonoBehaviour:
   - characterId: 0
     characterName: PINKZZ'IB'ZIB
     characterIcon: {fileID: 21300000, guid: 831f6b7636f8f554490834476829ea57, type: 3}
+    characterPrefab:
+      RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
+    prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
     characterNameHability: De Outro Mundo!
     characterDescription: Pinkzz'ib'zib altera a gravidade, possibilitando um salto
       longo a si mesma
-    characterPrefab:
-      RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
-    prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
+    abilityIcon: {fileID: 21300000, guid: a8c1f0cb3dbcc324997e8f56e605c87c, type: 3}
+    ability: {fileID: 11400000, guid: 3bb41023b2d2f0e4d8efc95ad4f7b9da, type: 2}
   - characterId: 1
     characterName: CERVIDAE
     characterIcon: {fileID: 21300000, guid: edd93de78a8ad7445a70cdba9bb32675, type: 3}
+    characterPrefab:
+      RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
+    prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
     characterNameHability: Almiscarado
     characterDescription: "Cervidae consegue atravessar obst\xE1culos sem perder
       velocidade!"
-    characterPrefab:
-      RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
-    prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
+    abilityIcon: {fileID: 21300000, guid: 2c4067f491156b540af62b1dbbc71a70, type: 3}
+    ability: {fileID: 11400000, guid: 856c38874a603904bb881f149806c3e0, type: 2}
   - characterId: 2
     characterName: CHIQUI
     characterIcon: {fileID: 21300000, guid: 130642f41d301d843b68410e11c51dc5, type: 3}
-    characterNameHability: Grafite Bomb
+    characterPrefab:
+      RawGuidValue: b201f91850b45ca44bd5ec445c98a20f
+    prefabCharDisplay: {fileID: 1726275553525532495, guid: b201f91850b45ca44bd5ec445c98a20f, type: 3}
+    characterNameHability: Spray Bomb
     characterDescription: "Pinta a tela do advers\xE1rio inibindo sua vis\xE3o por
       um curto tempo"
-    characterPrefab:
-      RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
-    prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
+    abilityIcon: {fileID: 21300000, guid: 2e8298763ee349f49bf2592ff1f06f63, type: 3}
+    ability: {fileID: 11400000, guid: 57b2409abdcc2bc43b712571ca2e8bc5, type: 2}
   - characterId: 3
     characterName: CALLIE
     characterIcon: {fileID: 21300000, guid: 1f339e1a559b1564996633c9d53ac48f, type: 3}
+    characterPrefab:
+      RawGuidValue: 36c2daed7fad8f9408e92810f5e345d0
+    prefabCharDisplay: {fileID: 8945765378957246971, guid: 36c2daed7fad8f9408e92810f5e345d0, type: 3}
     characterNameHability: KaBoom Bap
     characterDescription: "Callie faz seus fones emitirem um som de abalar, atordoando
       qualquer um que n\xE3o seja ela mesma"
-    characterPrefab:
-      RawGuidValue: d22caa2f62ccd3045a92e342ea2e3478
-    prefabCharDisplay: {fileID: 3220096068203699125, guid: d22caa2f62ccd3045a92e342ea2e3478, type: 3}
-  - characterId: 4
-    characterName: "L\xC9ORUSH"
-    characterIcon: {fileID: 21300000, guid: 2a0fd65a717588948856c8e9a8b9a6e9, type: 3}
-    characterNameHability: Hora do Rush
-    characterDescription: "L\xE9o aumenta sua velocidade de movimento bruscamente,
-      simulando seus tiros de 100 metros"
-    characterPrefab:
-      RawGuidValue: 8061ef6b1e4f61d46b83d45a99a9e817
-    prefabCharDisplay: {fileID: 4210512998854831798, guid: 8061ef6b1e4f61d46b83d45a99a9e817, type: 3}
+    abilityIcon: {fileID: 21300000, guid: a8df251ee3a7d3445a93e789499456cd, type: 3}
+    ability: {fileID: 11400000, guid: 7e9e76d8b8ed5f541afd0104dc2a1612, type: 2}
