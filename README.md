@@ -15,3 +15,10 @@ ou com um cabo USB conectado em um celular:
 File > Build and Run
 
 Escolha onde salvar a build dentro do seu aparelho mobile e se divirta!
+
+INTEGRANTES
+- Tiago Rodrigues Chaves - 00120859
+- Luana Cristini Araujo Franco - 00120520
+- Max Mosso - 00118680
+- Murilo Pereira Lopes Silva - 00120375
+- Débora Maria Gurgel do Nascimento - 00120967
