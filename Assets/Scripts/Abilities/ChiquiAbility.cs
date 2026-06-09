@@ -12,25 +12,8 @@ public class ChiquiAbility : AbilityData
 
         player.AbilityActive = true;
 
-        RPC_RequestShowEnemyEffect(duration);
+        abilityController.ShowSprayOnEnemy(player.Object.InputAuthority, duration);
 
         Debug.Log("CHIQUI ABILITY ACTIVATE");
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    private void RPC_RequestShowEnemyEffect(float duration)
-    {
-        PlayerRef enemy = abilityController.GetEnemyPlayer();
-
-        if (enemy == PlayerRef.None)
-            return;
-
-        RPC_ShowEffect(enemy, duration);
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
-    private void RPC_ShowEffect([RpcTarget] PlayerRef target, float duration)
-    {
-        ChiquiSprayAbilityUI.Instance.ShowEffect(duration);
     }
 }

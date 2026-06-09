@@ -43,6 +43,7 @@ public class CharacterAbilityController : NetworkBehaviour
         }
     }
 
+    #region Gets
     public Sprite GetAbilityIcon()
     {
         return characterData.ability.icon;
@@ -70,16 +71,17 @@ public class CharacterAbilityController : NetworkBehaviour
         return Cooldown.RemainingTime(Runner) ?? 0;
     }
 
-    public PlayerRef GetEnemyPlayer()
+    public PlayerRef GetEnemyPlayer(PlayerRef sourcePlayer)
     {
-        foreach (var player in Runner.ActivePlayers)
+        foreach (var pair in NetworkManager.Instance.spawnedCharacters)
         {
-            if (player != Object.InputAuthority)
-                return player;
+            if (pair.Key != sourcePlayer)
+                return pair.Key;
         }
 
         return PlayerRef.None;
     }
+    #endregion
 
     public void TryUseAbility()
     {
@@ -89,6 +91,7 @@ public class CharacterAbilityController : NetworkBehaviour
         RPC_RequestUseAbility();
     }
 
+    // REQUEST USE ABILITY FOR ALL CHARACTERS
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     private void RPC_RequestUseAbility()
     {
@@ -106,6 +109,45 @@ public class CharacterAbilityController : NetworkBehaviour
             Runner,
             characterData.ability.cooldown
         );
+    }
+
+    // CHIQUI ABILITY
+    public void ShowSprayOnEnemy(PlayerRef sourcePlayer, float duration)
+    {
+        PlayerRef enemy = GetEnemyPlayer(sourcePlayer);
+
+        if (enemy == PlayerRef.None)
+            return;
+
+        RPC_ShowSpray(enemy, duration);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_ShowSpray(PlayerRef target, float duration)
+    {
+        if (Runner.LocalPlayer != target)
+            return;
+
+        Debug.Log($"Local={Runner.LocalPlayer} Target={target}");
+
+        ChiquiSprayAbilityUI.Instance.ShowEffect(duration);
+    }
+
+    // CALLIE ABILITY
+    public void ApplyStunOnEnemy(PlayerRef sourcePlayer, float duration)
+    {
+        PlayerRef enemyPlayer = GetEnemyPlayer(sourcePlayer);
+
+        if (enemyPlayer == PlayerRef.None)
+            return;
+
+        if (!NetworkManager.Instance.spawnedCharacters.TryGetValue(enemyPlayer, out NetworkObject enemyObject))
+            return;
+
+        PlayerControllerMultiplayer enemy = enemyObject.GetComponent<PlayerControllerMultiplayer>();
+
+        enemy.IsStunned = true;
+        enemy.StunTimer = TickTimer.CreateFromSeconds(Runner, duration);
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
