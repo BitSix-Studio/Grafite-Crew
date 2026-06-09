@@ -251,7 +251,7 @@ MonoBehaviour:
   prefabCorridor:
     RawGuidValue: b912af04d50f3af488b2c9b4a7cc33fd
   numCorridorsActual: 0
-  maxNumCorridors: 5
+  maxNumCorridors: 10
 --- !u!114 &5036467880210163478
 MonoBehaviour:
   m_ObjectHideFlags: 0

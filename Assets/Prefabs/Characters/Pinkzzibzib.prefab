@@ -254,6 +254,8 @@ MonoBehaviour:
   _AbilityActive:
     _value: 0
   _defaultGravity: 0
+  _IsStunned:
+    _value: 0
 --- !u!114 &3172647447474654510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +279,7 @@ MonoBehaviour:
   prefabCorridor:
     RawGuidValue: b912af04d50f3af488b2c9b4a7cc33fd
   numCorridorsActual: 0
-  maxNumCorridors: 5
+  maxNumCorridors: 10
 --- !u!114 &6542061787648986389
 MonoBehaviour:
   m_ObjectHideFlags: 0
