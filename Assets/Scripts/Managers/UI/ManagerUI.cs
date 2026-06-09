@@ -112,6 +112,11 @@ public class ManagerUI : MonoBehaviour
         NetworkManager.Instance.playersConnectedText = playersConnectedText;
     }
 
+    public void ClosePlay()
+    {
+        networkConnectPanel.SetActive(false);
+    }
+
     public async void CreateRoom() 
     { 
         await NetworkManager.Instance.StartHost(inputRoom.text); 
