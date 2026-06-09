@@ -36,6 +36,8 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     [Networked, HideInInspector] public TickTimer AbilityEffectTimer { get; set; }
     [Networked, HideInInspector] public NetworkBool AbilityActive { get; set; }
     [Networked, HideInInspector] public float defaultGravity { get; set; }
+    [Networked, HideInInspector] public NetworkBool IsStunned { get; set; }
+    [Networked, HideInInspector] public TickTimer StunTimer { get; set; }
 
     private bool wasGrounded;
     private bool initialized;
@@ -52,7 +54,7 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
         #region Abilities
         defaultGravity = networkController.gravity;
-
+        IsStunned = false;
         #endregion
 
         if (!Object.HasInputAuthority)
@@ -87,15 +89,24 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (!canMove)
-            return;
-
         if (AbilityActive && AbilityEffectTimer.Expired(Runner))
         {
             networkController.gravity = defaultGravity;
-            AbilityActive = false;
             Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Obstacles"), false);
+
+            AbilityActive = false;
         }
+
+        if (IsStunned)
+        {
+            if (StunTimer.Expired(Runner))
+                IsStunned = false;
+
+            return;
+        }
+
+        if (!canMove)
+            return;
 
         if (GetInput(out NetworkInputData data))
         {

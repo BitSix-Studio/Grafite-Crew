@@ -219,13 +219,15 @@ MonoBehaviour:
   _VerticalSpeed: 0
   _IsGroundedNet:
     _value: 0
-  groundCheckDistance: 0.01
+  groundCheckDistance: 0.02
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   _AbilityActive:
     _value: 0
   _defaultGravity: 0
+  _IsStunned:
+    _value: 0
 --- !u!114 &788779984836392665
 MonoBehaviour:
   m_ObjectHideFlags: 0

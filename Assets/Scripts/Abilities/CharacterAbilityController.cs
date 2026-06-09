@@ -70,6 +70,17 @@ public class CharacterAbilityController : NetworkBehaviour
         return Cooldown.RemainingTime(Runner) ?? 0;
     }
 
+    public PlayerRef GetEnemyPlayer()
+    {
+        foreach (var player in Runner.ActivePlayers)
+        {
+            if (player != Object.InputAuthority)
+                return player;
+        }
+
+        return PlayerRef.None;
+    }
+
     public void TryUseAbility()
     {
         if (!HasInputAuthority)
