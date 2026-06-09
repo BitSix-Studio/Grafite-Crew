@@ -24,6 +24,7 @@ public class ManagerUI : MonoBehaviour
 
     [Header("Menu Buttons")]
     public Button playGameBtn;
+    public GameObject panelConfig;
 
     [Header("Reference of Choose Character")]
     public ChooseCharacterManager chooseCharacterManager;
@@ -73,6 +74,8 @@ public class ManagerUI : MonoBehaviour
         
         if (playGameBtn != null) 
             playGameBtn.onClick.AddListener(() => PlayGame());
+
+        panelConfig.SetActive(false);
 
         GameManager.Instance.RegisterUI(winPanel, losePanel);
 
@@ -132,6 +135,16 @@ public class ManagerUI : MonoBehaviour
             await NetworkManager.Instance.ShutdownRunner(); 
 
         SceneManager.LoadScene("MenuPrincipal"); 
+    }
+
+    public void Config()
+    {
+        panelConfig.SetActive(true);
+    }
+
+    public void CloseConfig()
+    {
+        panelConfig.SetActive(false);
     }
 
     public void QuitGame() 

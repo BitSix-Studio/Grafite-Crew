@@ -38,6 +38,9 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     [Networked, HideInInspector] public float defaultGravity { get; set; }
     [Networked, HideInInspector] public NetworkBool IsStunned { get; set; }
     [Networked, HideInInspector] public TickTimer StunTimer { get; set; }
+    
+    [SerializeField] private ParticleSystem stunParticles;
+    private bool previousStun;
 
     private bool wasGrounded;
     private bool initialized;
@@ -231,6 +234,21 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(start, end);
+    }
+
+    public override void Render()
+    {
+        if (IsStunned && !previousStun)
+        {
+            stunParticles.Play();
+        }
+
+        if (!IsStunned && previousStun)
+        {
+            stunParticles.Stop();
+        }
+
+        previousStun = IsStunned;
     }
 
     public void UpdateElevatorCamera(float offset)
