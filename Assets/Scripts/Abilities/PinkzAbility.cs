@@ -1,3 +1,4 @@
+using Fusion;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Pinkzzibzib")]
@@ -7,11 +8,12 @@ public class PinkzAbility : AbilityData
 
     public override void Execute(PlayerControllerMultiplayer player)
     {
-        Vector3 direction =
-            player.transform.right;
+        player.networkController.gravity = gravityForceJump;
 
-        player.networkController.Move(
-            direction * gravityForceJump
-        );
+        player.AbilityActive = true;
+
+        player.AbilityEffectTimer = TickTimer.CreateFromSeconds(player.Runner, duration);
+
+        Debug.Log("PINKZZ'IB'ZIB ABILITY ACTIVATE");
     }
 }

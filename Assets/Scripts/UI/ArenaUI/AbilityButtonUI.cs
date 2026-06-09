@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class AbilityButtonUI : MonoBehaviour
@@ -31,6 +32,8 @@ public class AbilityButtonUI : MonoBehaviour
             return;
 
         playerAbility.TryUseAbility();
+
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     private void Update()

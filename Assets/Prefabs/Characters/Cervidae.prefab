@@ -100,6 +100,10 @@ PrefabInstance:
       value: Cervidae
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: afe329ccaba953b44a2601ca61d36677, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: afe329ccaba953b44a2601ca61d36677, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -213,13 +217,20 @@ MonoBehaviour:
   networkController: {fileID: 0}
   upElevator: {fileID: 5814193305061692353}
   _PlayerIndex: 0
-  _CharacterId: 0
   directionChangeSpeed: 1
   magnitudeLimitForStopAnimations: 0.02
+  _IsRunning:
+    _value: 0
+  _VerticalSpeed: 0
+  _IsGroundedNet:
+    _value: 0
   groundCheckDistance: 0.01
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  _AbilityActive:
+    _value: 0
+  _defaultGravity: 0
 --- !u!114 &5814193305061692353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4fec341f252b4a45b7ec470f44aeb8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _CharacterId: 0
 --- !u!114 &7971220259705007794
 MonoBehaviour:
   m_ObjectHideFlags: 0

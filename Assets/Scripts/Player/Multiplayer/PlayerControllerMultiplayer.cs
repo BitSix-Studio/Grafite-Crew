@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerControllerMultiplayer : NetworkBehaviour
 {
-    [Networked] public NetworkBool canMove { get; set; }
+    [Networked, HideInInspector] public NetworkBool canMove { get; set; }
 
     [HideInInspector] public NetworkCharacterController networkController;
     private Animator animator;
@@ -14,24 +14,28 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
 
     [Header("Camera Player Config")]
     private CameraFocus cam;
-    [Networked] public int PlayerIndex { get; set; }
+    [Networked, HideInInspector] public int PlayerIndex { get; set; }
 
     [Header("Move Character Config")]
     private Vector3 currentDirection;
     public float directionChangeSpeed;
     [Range(0f, 0.1f)] public float magnitudeLimitForStopAnimations;
     private int facingDirection = 1;
-    [Networked] public NetworkBool IsRunning { get; set; }
+    [Networked, HideInInspector] public NetworkBool IsRunning { get; set; }
 
-    [Networked] public float VerticalSpeed { get; set; }
+    [Networked, HideInInspector] public float VerticalSpeed { get; set; }
 
-    [Networked] public NetworkBool IsGroundedNet { get; set; }
+    [Networked, HideInInspector] public NetworkBool IsGroundedNet { get; set; }
 
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundLayer;
 
     [HideInInspector] public NetworkButtons previousButtons;
     public bool jumpPressedThisTick { get; private set; }
+
+    [Networked, HideInInspector] public TickTimer AbilityEffectTimer { get; set; }
+    [Networked, HideInInspector] public NetworkBool AbilityActive { get; set; }
+    [Networked, HideInInspector] public float defaultGravity { get; set; }
 
     private bool wasGrounded;
     private bool initialized;
@@ -45,6 +49,11 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
         wasGrounded = IsGrounded();
         canMove = true;
         initialized = true;
+
+        #region Abilities
+        defaultGravity = networkController.gravity;
+
+        #endregion
 
         if (!Object.HasInputAuthority)
             return;
@@ -80,6 +89,13 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     {
         if (!canMove)
             return;
+
+        if (AbilityActive && AbilityEffectTimer.Expired(Runner))
+        {
+            networkController.gravity = defaultGravity;
+            AbilityActive = false;
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Obstacles"), false);
+        }
 
         if (GetInput(out NetworkInputData data))
         {

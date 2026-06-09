@@ -1,17 +1,17 @@
+using Fusion;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Cervidae")]
 public class CervidaeAbility : AbilityData
 {
-    public float gravityForceJump;
-
     public override void Execute(PlayerControllerMultiplayer player)
     {
-        Vector3 direction =
-            player.transform.right;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Obstacles"), true);
 
-        player.networkController.Move(
-            direction * gravityForceJump
-        );
+        player.AbilityActive = true;
+
+        player.AbilityEffectTimer = TickTimer.CreateFromSeconds(player.Runner, duration);
+
+        Debug.Log("CERVIDAE ABILITY ACTIVATE");
     }
 }

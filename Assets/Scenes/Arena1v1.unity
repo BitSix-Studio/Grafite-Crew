@@ -489,7 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -761,7 +761,7 @@ GameObject:
   - component: {fileID: 400760696}
   - component: {fileID: 400760695}
   - component: {fileID: 400760694}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoCima (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1506,7 +1506,7 @@ GameObject:
   - component: {fileID: 552417814}
   - component: {fileID: 552417813}
   - component: {fileID: 552417812}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoCima (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1980,7 +1980,7 @@ GameObject:
   - component: {fileID: 664433391}
   - component: {fileID: 664433390}
   - component: {fileID: 664433389}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoCima
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2600,7 +2600,7 @@ GameObject:
   - component: {fileID: 856160917}
   - component: {fileID: 856160916}
   - component: {fileID: 856160915}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2705,7 +2705,7 @@ GameObject:
   - component: {fileID: 857009632}
   - component: {fileID: 857009631}
   - component: {fileID: 857009630}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4611,7 +4611,7 @@ GameObject:
   - component: {fileID: 1528691639}
   - component: {fileID: 1528691638}
   - component: {fileID: 1528691637}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5008,7 +5008,7 @@ GameObject:
   - component: {fileID: 1665382119}
   - component: {fileID: 1665382118}
   - component: {fileID: 1665382117}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5247,7 +5247,7 @@ GameObject:
   - component: {fileID: 1694598410}
   - component: {fileID: 1694598409}
   - component: {fileID: 1694598408}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5825,7 +5825,7 @@ GameObject:
   - component: {fileID: 1881579287}
   - component: {fileID: 1881579286}
   - component: {fileID: 1881579285}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoCima (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6025,7 +6025,7 @@ GameObject:
   - component: {fileID: 2006793594}
   - component: {fileID: 2006793593}
   - component: {fileID: 2006793592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PerigoBaixo (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

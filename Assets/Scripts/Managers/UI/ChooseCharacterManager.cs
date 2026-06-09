@@ -21,7 +21,7 @@ public class ChooseCharacterManager : MonoBehaviour
     public Transform localCharacterDisplay;
 
     private static Vector3 rotationCharDisplay = new(0f, -40f, 0f);
-    private static Vector3 scaleCharDisplay = new(40f, 40f, 40f);
+    private static Vector3 scaleCharDisplay = new(37f, 37f, 37f);
 
     private int selectedOption = 0;
     private GameObject lastPrefabCharDisplay;
