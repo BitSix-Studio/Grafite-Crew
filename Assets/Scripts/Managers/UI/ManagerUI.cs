@@ -75,7 +75,8 @@ public class ManagerUI : MonoBehaviour
         if (playGameBtn != null) 
             playGameBtn.onClick.AddListener(() => PlayGame());
 
-        panelConfig.SetActive(false);
+        if(panelConfig != null)
+            panelConfig.SetActive(false);
 
         GameManager.Instance.RegisterUI(winPanel, losePanel);
 
