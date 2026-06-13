@@ -57,3 +57,14 @@ MonoBehaviour:
       qualquer um que n\xE3o seja ela mesma"
     abilityIcon: {fileID: 21300000, guid: a8df251ee3a7d3445a93e789499456cd, type: 3}
     ability: {fileID: 11400000, guid: 7e9e76d8b8ed5f541afd0104dc2a1612, type: 2}
+  - characterId: 4
+    characterName: "L\xE9oRush"
+    characterIcon: {fileID: 21300000, guid: 2a0fd65a717588948856c8e9a8b9a6e9, type: 3}
+    characterPrefab:
+      RawGuidValue: f9029e1022af2784e97fb90c033db659
+    prefabCharDisplay: {fileID: 7009896585915740466, guid: f9029e1022af2784e97fb90c033db659, type: 3}
+    characterNameHability: Hora do Rush
+    characterDescription: "L\xE9o aumenta sua velocidade de movimento, simulando
+      suas arrancadas em tiros de 100 metros."
+    abilityIcon: {fileID: 21300000, guid: 91539b5bae0a4104eaed008f7354eb82, type: 3}
+    ability: {fileID: 11400000, guid: 4bf4061737fd286489423cd31f08afc2, type: 2}

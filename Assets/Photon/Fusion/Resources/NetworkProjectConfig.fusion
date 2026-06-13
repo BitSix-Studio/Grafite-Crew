@@ -4,7 +4,7 @@
     "PeerMode": 0,
     "LagCompensation": {
         "Enabled": true,
-        "HitboxBufferLengthInMs": 200,
+        "HitboxBufferLengthInMs": 250,
         "HitboxDefaultCapacity": 512,
         "CachedStaticCollidersSize": 64
     },
@@ -31,12 +31,12 @@
         "EnableAdaptivePacketFragmentation": false
     },
     "Network": {
-        "ConnectionTimeout": 10.0,
-        "ConnectionShutdownTime": 1.0,
-        "ReliableDataTransferModes": 3
+        "ConnectionTimeout": 15.0,
+        "ConnectionShutdownTime": 2.0,
+        "ReliableDataTransferModes": 1
     },
     "HostMigration": {
-        "EnableAutoUpdate": false,
+        "EnableAutoUpdate": true,
         "UpdateDelay": 10
     },
     "EncryptionConfig": {

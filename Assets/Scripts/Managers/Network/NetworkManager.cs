@@ -18,6 +18,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] private NetworkPrefabRef characterSelectionNetworkPrefab;
 
+    public bool SceneReady { get; private set; }
+
     private void Awake() 
     { 
         if (Instance != null && Instance != this) 
@@ -239,6 +241,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             return;
 
         StartCoroutine(SpawnPlayers(runner));
+        SceneReady = true;
     }
 
     [SerializeField] private CharacterDatabase characterDB;
@@ -268,7 +271,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (!AllPlayersSelected())
             return;
 
-        runner.LoadScene("Arena1v1");
+        SceneReady = false;
+        StartCoroutine(LoadingManager.Instance.LoadProcess
+            (() =>
+                {
+                    runner.LoadScene("Arena1v1");
+                }, 
+                this
+            ));
     }
 
     private bool AllPlayersSelected()

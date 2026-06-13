@@ -995,6 +995,10 @@ MonoBehaviour:
   elevatorColliderLeft: {fileID: 445353671069699568}
   animDoorRight: {fileID: 6442990460145291203}
   animDoorLeft: {fileID: 4323826845561132158}
+  _RightDoorOpen:
+    _value: 0
+  _LeftDoorOpen:
+    _value: 0
   _IsRightSide:
     _value: 0
   backgroundRenderer: {fileID: 1083126335030766970}
@@ -1014,6 +1018,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 284ac927d1b82084182121a7a1bf8ea2, type: 3}
   - {fileID: 2800000, guid: 9fc5061d930879340afe41e964b9fcdd, type: 3}
   - {fileID: 2800000, guid: 3d43f795db5f3ef44aae286cb49ae1a2, type: 3}
+  corridorInitScene: 0
 --- !u!114 &6305520486515630441
 MonoBehaviour:
   m_ObjectHideFlags: 0
